@@ -1,0 +1,10 @@
+{
+  "Port": "8080",
+  "Database": {
+    "MysqlHost": "localhost",
+    "Mysqlport": "3306",
+    "MysqlUser": "apicollection",
+    "MysqlPassword": "",
+    "MysqlDatabase": "apicollection"
+  }
+}

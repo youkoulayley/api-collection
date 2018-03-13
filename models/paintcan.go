@@ -1,9 +1,10 @@
 package models
 
 import (
-	"collection/config"
 	"log"
 	"time"
+
+	"github.com/youkoulayley/api-collection/databases"
 )
 
 // PaintCan contain the struct for paintcan
@@ -26,7 +27,7 @@ func NewPaintCan(pc *PaintCan) {
 	pc.CreatedAt = time.Now()
 	pc.UpdatedAt = time.Now()
 
-	err := config.Db().QueryRow("INSERT INTO paintcans (manufacturer, color, created_at, updated_at) VALUES (?,$2,$3,$4)", pc.Manufacturer, pc.Color, pc.CreatedAt, pc.UpdatedAt).Scan(&pc.ID)
+	err := databases.Db().QueryRow("INSERT INTO paintcans (manufacturer, color, created_at, updated_at) VALUES (?,?,?,?)", pc.Manufacturer, pc.Color, pc.CreatedAt, pc.UpdatedAt).Scan(&pc.ID)
 
 	if err != nil {
 		log.Fatal(err)
@@ -37,7 +38,7 @@ func NewPaintCan(pc *PaintCan) {
 func FindPaintCanByID(id int) *PaintCan {
 	var cp PaintCan
 
-	row := config.Db().QueryRow("SELECT * FROM paintcans WHERE id = $1;", id)
+	row := databases.Db().QueryRow("SELECT * FROM paintcans WHERE id = ?;", id)
 	err := row.Scan(&cp.ID, &cp.Manufacturer, &cp.Color, &cp.CreatedAt, &cp.UpdatedAt)
 
 	if err != nil {
@@ -51,7 +52,7 @@ func FindPaintCanByID(id int) *PaintCan {
 func AllPaintCans() *PaintCans {
 	var pcs PaintCans
 
-	rows, err := config.Db().Query("SELECT * FROM paincans")
+	rows, err := databases.Db().Query("SELECT * FROM paintcans")
 
 	if err != nil {
 		log.Fatal(err)
@@ -79,7 +80,7 @@ func AllPaintCans() *PaintCans {
 func UpdatePaintCan(pc *PaintCan) {
 	pc.UpdatedAt = time.Now()
 
-	stmt, err := config.Db().Prepare("UPDATE paintcans SET manufacturer=$1, color=$2, updated_at=$3 WHERE id=$4;")
+	stmt, err := databases.Db().Prepare("UPDATE paintcans SET manufacturer=?, color=?, updated_at=? WHERE id=?;")
 
 	if err != nil {
 		log.Fatal(err)
@@ -94,7 +95,7 @@ func UpdatePaintCan(pc *PaintCan) {
 
 // DeletePaintCanByID delete one paintcan
 func DeletePaintCanByID(id int) error {
-	stmt, err := config.Db().Prepare("DELETE FROM paintcans WHERE id=$1;")
+	stmt, err := databases.Db().Prepare("DELETE FROM paintcans WHERE id=?;")
 
 	if err != nil {
 		log.Fatal(err)

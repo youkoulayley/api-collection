@@ -1,12 +1,13 @@
 package controllers
 
 import (
-	"collection/models"
 	"encoding/json"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"strconv"
+
+	"github.com/youkoulayley/api-collection/models"
 
 	"github.com/gorilla/mux"
 )
@@ -19,8 +20,8 @@ func PaintCansIndex(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(models.AllPaintCans())
 }
 
-// PaintCanCreate create a new paint can
-func PaintCanCreate(w http.ResponseWriter, r *http.Request) {
+// PaintCansCreate create a new paint can
+func PaintCansCreate(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-type", "application/json;charset=UTF-8")
 	w.WriteHeader(http.StatusOK)
 

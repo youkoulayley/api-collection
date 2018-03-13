@@ -1,18 +1,20 @@
 package main
 
 import (
-	"collection/config"
-	"collection/models"
+	"fmt"
 	"log"
 	"net/http"
+
+	"github.com/youkoulayley/api-collection/config"
+	"github.com/youkoulayley/api-collection/databases"
 )
 
 func main() {
-	config.OpenDB()
+	conf := config.GetConf()
+	databases.OpenDB(conf.Database.MysqlUser, conf.Database.MysqlPassword, conf.Database.MysqlHost, conf.Database.MysqlDatabase, conf.Database.MysqlPort)
+
 	router := InitializeRouter()
 
-	// Populate database
-	models.NewPaintCan(&models.PaintCan{Manufacturer: "Citadel", Color: "White Scar"})
-
-	log.Fatal(http.ListenAndServe(":8080", router))
+	fmt.Printf("Start to listen on %s ...\n", conf.Port)
+	log.Fatal(http.ListenAndServe(":"+conf.Port, router))
 }

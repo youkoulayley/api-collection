@@ -1,7 +1,6 @@
-package config
+package databases
 
 import (
-	"collection/databases"
 	"database/sql"
 	"fmt"
 
@@ -11,10 +10,10 @@ import (
 var db *sql.DB
 
 // OpenDB create the connection to database
-func OpenDB() {
+func OpenDB(u string, p string, h string, d string, P string) {
 	var err error
 
-	db, err = sql.Open("mysql", "root:titoun@tcp(192.168.1.43:3306)/collection")
+	db, err = sql.Open("mysql", u+":"+p+"@tcp("+h+":"+P+")/"+d)
 	if err != nil {
 		fmt.Printf("Failed to open connection to database : %s", err.Error())
 	}
@@ -25,7 +24,7 @@ func OpenDB() {
 	}
 
 	// Create painting table if not exist
-	databases.CreatePaintCansTable(db)
+	CreatePaintCansTable(db)
 }
 
 // Db Getter for db var
