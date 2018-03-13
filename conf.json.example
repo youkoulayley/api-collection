@@ -6,5 +6,10 @@
     "MysqlUser": "apicollection",
     "MysqlPassword": "",
     "MysqlDatabase": "apicollection"
+  },
+  "Log": {
+    "Formatter": "ascii",
+    "Output": "stdout",
+    "sLevel": "debug"
   }
 }

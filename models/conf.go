@@ -10,4 +10,9 @@ type Conf struct {
 		MysqlPassword string
 		MysqlDatabase string
 	}
+	Log struct {
+		Formatter string
+		Output    string
+		Level     string
+	}
 }

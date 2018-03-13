@@ -1,4 +1,4 @@
-package config
+package bootstrap
 
 import (
 	"encoding/json"
@@ -10,7 +10,7 @@ import (
 
 // GetConf get the config file
 func GetConf() *models.Conf {
-	file, err := os.Open("config/conf.json")
+	file, err := os.Open("conf.json")
 	if err != nil {
 		fmt.Printf("Can't open file : %s", err.Error())
 	}

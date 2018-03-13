@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/youkoulayley/api-collection/databases/repositories"
 	"github.com/youkoulayley/api-collection/models"
 
 	"github.com/gorilla/mux"
@@ -17,7 +18,7 @@ func PaintCansIndex(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-type", "application/json;charset=UTF-8")
 	w.WriteHeader(http.StatusOK)
 
-	json.NewEncoder(w).Encode(models.AllPaintCans())
+	json.NewEncoder(w).Encode(repositories.AllPaintCans())
 }
 
 // PaintCansCreate create a new paint can
@@ -39,7 +40,7 @@ func PaintCansCreate(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 
-	models.NewPaintCan(&paintcan)
+	repositories.NewPaintCan(&paintcan)
 
 	json.NewEncoder(w).Encode(paintcan)
 }
@@ -56,7 +57,7 @@ func PaintCansShow(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 
-	paintcan := models.FindPaintCanByID(id)
+	paintcan := repositories.FindPaintCanByID(id)
 
 	json.NewEncoder(w).Encode(paintcan)
 }
@@ -79,14 +80,14 @@ func PaintCansUpdate(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 
-	paintcan := models.FindPaintCanByID(id)
+	paintcan := repositories.FindPaintCanByID(id)
 
 	err = json.Unmarshal(body, &paintcan)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	models.UpdatePaintCan(paintcan)
+	repositories.UpdatePaintCan(paintcan)
 
 	json.NewEncoder(w).Encode(paintcan)
 }
@@ -105,7 +106,7 @@ func PaintCansDelete(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 
-	err = models.DeletePaintCanByID(id)
+	err = repositories.DeletePaintCanByID(id)
 	if err != nil {
 		log.Fatal(err)
 	}
