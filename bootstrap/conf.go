@@ -2,9 +2,9 @@ package bootstrap
 
 import (
 	"encoding/json"
-	"fmt"
 	"os"
 
+	log "github.com/sirupsen/logrus"
 	"github.com/youkoulayley/api-collection/models"
 )
 
@@ -12,16 +12,21 @@ import (
 func GetConf() *models.Conf {
 	file, err := os.Open("conf.json")
 	if err != nil {
-		fmt.Printf("Can't open file : %s", err.Error())
+		// If the conf file is not loaded, we exit the app
+		log.Fatal("Conf - Failed to open file : ", err.Error())
+	} else {
+		log.Debug("Conf - Open")
 	}
 	defer file.Close()
+	defer log.Debug("Conf - Closed")
 
+	// Decode the conf file and initiate the model
 	decoder := json.NewDecoder(file)
 	configuration := models.Conf{}
 
 	err = decoder.Decode(&configuration)
 	if err != nil {
-		fmt.Println("error: ", err)
+		log.Fatal("Conf - Failed to decode conf file : ", err.Error())
 	}
 
 	return &configuration

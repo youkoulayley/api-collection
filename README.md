@@ -10,8 +10,8 @@
 |Database.MysqlPassword|Password of the mysql database|string|
 ||Database.MysqlDatabase|Name of the mysql database|string|
 |Log.Formatter|Format of the logs|ascii/json|
-|Log.Output|Where the logs will be|stdout/file|
-|Log.Level|Level of logs|debug/info/warn/crit/panic/fatal|
+|Log.Output|Where the logs will be|stdout/stderr|
+|Log.Level|Level of logs|debug/info/warn/crit|
 
 # Credits
 Based on the work of Sorastro.

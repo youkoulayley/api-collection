@@ -3,9 +3,10 @@ package controllers
 import (
 	"encoding/json"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"strconv"
+
+	log "github.com/sirupsen/logrus"
 
 	"github.com/youkoulayley/api-collection/databases/repositories"
 	"github.com/youkoulayley/api-collection/models"
@@ -29,7 +30,7 @@ func PaintCansCreate(w http.ResponseWriter, r *http.Request) {
 	body, err := ioutil.ReadAll(r.Body)
 
 	if err != nil {
-		log.Fatal(err)
+		log.Error(err)
 	}
 
 	var paintcan models.PaintCan
@@ -37,12 +38,15 @@ func PaintCansCreate(w http.ResponseWriter, r *http.Request) {
 	err = json.Unmarshal(body, &paintcan)
 
 	if err != nil {
-		log.Fatal(err)
+		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+		w.WriteHeader(422) // unprocessable entity
+		if err = json.NewEncoder(w).Encode(err); err != nil {
+			log.Error(err)
+		}
+	} else {
+		repositories.NewPaintCan(&paintcan)
+		json.NewEncoder(w).Encode(paintcan)
 	}
-
-	repositories.NewPaintCan(&paintcan)
-
-	json.NewEncoder(w).Encode(paintcan)
 }
 
 // PaintCansShow get one pain can in the database

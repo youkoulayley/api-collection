@@ -12,7 +12,7 @@ import (
 // NewPaintCan create a new paint can
 func NewPaintCan(pc *models.PaintCan) {
 	if pc == nil {
-		log.Fatal(pc)
+		log.Error(pc)
 	}
 	pc.CreatedAt = time.Now()
 	pc.UpdatedAt = time.Now()
@@ -20,7 +20,7 @@ func NewPaintCan(pc *models.PaintCan) {
 	err := bootstrap.Db().QueryRow("INSERT INTO paintcans (manufacturer, color, created_at, updated_at) VALUES (?,?,?,?)", pc.Manufacturer, pc.Color, pc.CreatedAt, pc.UpdatedAt).Scan(&pc.ID)
 
 	if err != nil {
-
+		log.Error("Cannot add paintcan : ", err.Error)
 	}
 }
 

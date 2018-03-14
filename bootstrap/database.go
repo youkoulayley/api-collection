@@ -2,10 +2,9 @@ package bootstrap
 
 import (
 	"database/sql"
-	"fmt"
 
 	_ "github.com/go-sql-driver/mysql" // Import Mysql specific
-	"github.com/youkoulayley/api-collection/databases/migrations"
+	log "github.com/sirupsen/logrus"
 	"github.com/youkoulayley/api-collection/models"
 )
 
@@ -19,16 +18,17 @@ func OpenDB(c *models.Conf) {
 
 	db, err = sql.Open("mysql", d.MysqlUser+":"+d.MysqlPassword+"@tcp("+d.MysqlHost+":"+d.MysqlPort+")/"+d.MysqlDatabase+"?charset=utf8&parseTime=True")
 	if err != nil {
-		fmt.Printf("Failed to open connection to database : %s", err.Error())
+		log.Error("Database - Failed to open connection : ", err.Error())
+	} else {
+		log.Info("Database - Successfully connected")
 	}
 
 	err = db.Ping()
 	if err != nil {
-		fmt.Printf("Failed to connect to database : %s", err.Error())
+		log.Error("Database - Failed to connect : ", err.Error())
+	} else {
+		log.Info("Database - Joinable")
 	}
-
-	// Create painting table if not exist
-	migrations.CreatePaintCansTable(db)
 }
 
 // Db Getter for db var
