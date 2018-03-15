@@ -43,8 +43,8 @@ func PaintCansCreate(w http.ResponseWriter, r *http.Request) {
 			log.Error(err)
 		}
 	} else {
-		result := repositories.NewPaintCan(&paintcan)
-		json.NewEncoder(w).Encode(result)
+		_ = repositories.NewPaintCan(&paintcan)
+		json.NewEncoder(w).Encode(paintcan)
 	}
 }
 

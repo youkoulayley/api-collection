@@ -10,7 +10,7 @@ import (
 )
 
 // NewPaintCan create a new paint can
-func NewPaintCan(pc *models.PaintCan) *models.PaintCan {
+func NewPaintCan(pc *models.PaintCan) {
 	if pc == nil {
 		log.Error(pc)
 	}
@@ -36,7 +36,6 @@ func NewPaintCan(pc *models.PaintCan) *models.PaintCan {
 	if err != nil {
 		log.Error(err.Error())
 	}
-	return pc
 }
 
 // FindPaintCanByID find a paint can in table
