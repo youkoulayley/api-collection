@@ -7,6 +7,8 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+var router *mux.Router
+
 // InitializeRouter do what is name tell he does
 func InitializeRouter() *mux.Router {
 	// StrictSlash is true => redirect /cars/ to /cars
@@ -25,5 +27,10 @@ func InitializeRouter() *mux.Router {
 	router.Methods("PUT").Path("/paintcans/{id}").Name("Update").HandlerFunc(controllers.PaintCansUpdate)
 	log.Info("Routes - /paintcans/{id} DELETE")
 	router.Methods("DELETE").Path("/paintcans/{id}").Name("Delete").HandlerFunc(controllers.PaintCansDelete)
+
+	return router
+}
+
+func Router() *mux.Router {
 	return router
 }

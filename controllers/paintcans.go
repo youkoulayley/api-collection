@@ -40,7 +40,7 @@ func PaintCansCreate(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 		w.WriteHeader(422) // unprocessable entity
 		if err = json.NewEncoder(w).Encode(err); err != nil {
-			log.Error(err)
+			log.Error(err.Error())
 		}
 	} else {
 		repositories.NewPaintCan(&paintcan)
@@ -57,7 +57,7 @@ func PaintCansShow(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(vars["id"])
 
 	if err != nil {
-		log.Fatal(err)
+		log.Error(err.Error())
 	}
 
 	paintcan := repositories.FindPaintCanByID(id)
@@ -78,20 +78,20 @@ func PaintCansUpdate(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(vars["id"])
 
 	if err != nil {
-		log.Fatal(err)
+		log.Error(err.Error())
 	}
 
 	body, err := ioutil.ReadAll(r.Body)
 
 	if err != nil {
-		log.Fatal(err)
+		log.Error(err.Error())
 	}
 
 	paintcan := repositories.FindPaintCanByID(id)
 
 	err = json.Unmarshal(body, &paintcan)
 	if err != nil {
-		log.Fatal(err)
+		log.Error(err.Error())
 	}
 
 	repositories.UpdatePaintCan(paintcan)
@@ -110,12 +110,12 @@ func PaintCansDelete(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(vars["id"])
 
 	if err != nil {
-		log.Fatal(err)
+		log.Error(err)
 	}
 
 	err = repositories.DeletePaintCanByID(id)
 	if err != nil {
-		log.Fatal(err)
+		log.Error(err.Error())
 	} else {
 		json.NewEncoder(w).Encode(models.Heartbeat{Status: "OK", Code: 200})
 	}

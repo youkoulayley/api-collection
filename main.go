@@ -10,7 +10,7 @@ import (
 )
 
 func main() {
-	c := bootstrap.GetConf()
+	c := bootstrap.GetConf("conf.json")
 	bootstrap.InitLogs(c)
 	bootstrap.OpenDB(c)
 	migrations.LaunchMigrations()

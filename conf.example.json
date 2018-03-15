@@ -5,7 +5,8 @@
     "Mysqlport": "3306",
     "MysqlUser": "apicollection",
     "MysqlPassword": "",
-    "MysqlDatabase": "apicollection"
+    "MysqlDatabase": "apicollection",
+    "MysqlTest": "testapicollection"
   },
   "Log": {
     "Formatter": "ascii",

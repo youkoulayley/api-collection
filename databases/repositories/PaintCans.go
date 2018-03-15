@@ -19,22 +19,22 @@ func NewPaintCan(pc *models.PaintCan) {
 
 	query, err := bootstrap.Db().Prepare("INSERT INTO paintcans (manufacturer, color, created_at, updated_at) VALUES (?,?,?,?)")
 	if err != nil {
-		log.Error(err.Error())
+		log.Debug(err.Error())
 	}
 
 	stmt, err := query.Exec(pc.Manufacturer, pc.Color, pc.CreatedAt, pc.UpdatedAt)
 	if err != nil {
-		log.Error(err.Error())
+		log.Debug(err.Error())
 	}
 
 	lastinsertid, err := stmt.LastInsertId()
 	if err != nil {
-		log.Error(err.Error())
+		log.Debug(err.Error())
 	}
 
 	err = bootstrap.Db().QueryRow("SELECT * FROM paintcans WHERE id = ?", lastinsertid).Scan(&pc.ID, &pc.Manufacturer, &pc.Color, &pc.CreatedAt, &pc.UpdatedAt)
 	if err != nil {
-		log.Error(err.Error())
+		log.Debug(err.Error())
 	}
 }
 
@@ -46,7 +46,7 @@ func FindPaintCanByID(id int) *models.PaintCan {
 	err := row.Scan(&pc.ID, &pc.Manufacturer, &pc.Color, &pc.CreatedAt, &pc.UpdatedAt)
 
 	if err != nil {
-		log.Error(err.Error())
+		log.Debug(err.Error())
 	}
 
 	return &pc
@@ -59,7 +59,7 @@ func AllPaintCans() *models.PaintCans {
 	rows, err := bootstrap.Db().Query("SELECT * FROM paintcans")
 
 	if err != nil {
-		log.Fatal(err)
+		log.Debug(err)
 	}
 
 	// Close rows after all readed
@@ -71,7 +71,7 @@ func AllPaintCans() *models.PaintCans {
 		err := rows.Scan(&pc.ID, &pc.Manufacturer, &pc.Color, &pc.CreatedAt, &pc.UpdatedAt)
 
 		if err != nil {
-			log.Fatal(err)
+			log.Debug(err)
 		}
 
 		pcs = append(pcs, pc)
@@ -87,13 +87,13 @@ func UpdatePaintCan(pc *models.PaintCan) {
 	stmt, err := bootstrap.Db().Prepare("UPDATE paintcans SET manufacturer=?, color=?, updated_at=? WHERE id=?;")
 
 	if err != nil {
-		log.Fatal(err)
+		log.Debug(err)
 	}
 
 	_, err = stmt.Exec(pc.Manufacturer, pc.Color, pc.UpdatedAt, pc.ID)
 
 	if err != nil {
-		log.Fatal(err)
+		log.Debug(err)
 	}
 }
 
@@ -102,7 +102,7 @@ func DeletePaintCanByID(id int) error {
 	stmt, err := bootstrap.Db().Prepare("DELETE FROM paintcans WHERE id=?;")
 
 	if err != nil {
-		log.Fatal(err)
+		log.Debug(err)
 	}
 
 	_, err = stmt.Exec(id)
