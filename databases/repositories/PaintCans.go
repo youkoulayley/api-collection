@@ -46,7 +46,7 @@ func FindPaintCanByID(id int) *models.PaintCan {
 	err := row.Scan(&pc.ID, &pc.Manufacturer, &pc.Color, &pc.CreatedAt, &pc.UpdatedAt)
 
 	if err != nil {
-		log.Debug(err.Error())
+		log.Error(err.Error())
 	}
 
 	return &pc

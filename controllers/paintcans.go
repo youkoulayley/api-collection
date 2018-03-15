@@ -62,7 +62,11 @@ func PaintCansShow(w http.ResponseWriter, r *http.Request) {
 
 	paintcan := repositories.FindPaintCanByID(id)
 
-	json.NewEncoder(w).Encode(paintcan)
+	if paintcan.ID == 0 {
+		json.NewEncoder(w).Encode(models.Heartbeat{Status: "Not Found", Code: 404})
+	} else {
+		json.NewEncoder(w).Encode(paintcan)
+	}
 }
 
 //PaintCansUpdate update a record

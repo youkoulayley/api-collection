@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
 
 	log "github.com/sirupsen/logrus"
@@ -18,6 +17,6 @@ func main() {
 
 	router := InitializeRouter()
 
-	fmt.Printf("Start to listen on %s ...\n", c.Port)
+	log.Info("Start to listen on ", c.Port, " ...")
 	log.Fatal(http.ListenAndServe(":"+c.Port, router))
 }
