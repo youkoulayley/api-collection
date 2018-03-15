@@ -36,7 +36,6 @@ func PaintCansCreate(w http.ResponseWriter, r *http.Request) {
 	var paintcan models.PaintCan
 
 	err = json.Unmarshal(body, &paintcan)
-
 	if err != nil {
 		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 		w.WriteHeader(422) // unprocessable entity
@@ -44,8 +43,8 @@ func PaintCansCreate(w http.ResponseWriter, r *http.Request) {
 			log.Error(err)
 		}
 	} else {
-		repositories.NewPaintCan(&paintcan)
-		json.NewEncoder(w).Encode(paintcan)
+		result := repositories.NewPaintCan(&paintcan)
+		json.NewEncoder(w).Encode(result)
 	}
 }
 

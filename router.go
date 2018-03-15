@@ -11,6 +11,8 @@ func InitializeRouter() *mux.Router {
 	// StrictSlash is true => redirect /cars/ to /cars
 	router := mux.NewRouter().StrictSlash(true)
 
+	router.Methods("GET").Path("/status").Name("Status").HandlerFunc(controllers.HeartbeatIndex)
+
 	router.Methods("GET").Path("/paintcans").Name("Index").HandlerFunc(controllers.PaintCansIndex)
 	router.Methods("POST").Path("/paintcans").Name("Create").HandlerFunc(controllers.PaintCansCreate)
 	router.Methods("GET").Path("/paintcans/{id}").Name("Show").HandlerFunc(controllers.PaintCansShow)

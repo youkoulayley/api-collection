@@ -10,32 +10,47 @@ import (
 )
 
 // NewPaintCan create a new paint can
-func NewPaintCan(pc *models.PaintCan) {
+func NewPaintCan(pc *models.PaintCan) *models.PaintCan {
 	if pc == nil {
 		log.Error(pc)
 	}
 	pc.CreatedAt = time.Now()
 	pc.UpdatedAt = time.Now()
 
-	err := bootstrap.Db().QueryRow("INSERT INTO paintcans (manufacturer, color, created_at, updated_at) VALUES (?,?,?,?)", pc.Manufacturer, pc.Color, pc.CreatedAt, pc.UpdatedAt).Scan(&pc.ID)
-
+	query, err := bootstrap.Db().Prepare("INSERT INTO paintcans (manufacturer, color, created_at, updated_at) VALUES (?,?,?,?)")
 	if err != nil {
-		log.Error("Cannot add paintcan : ", err.Error)
+		log.Error(err.Error())
 	}
+
+	stmt, err := query.Exec(pc.Manufacturer, pc.Color, pc.CreatedAt, pc.UpdatedAt)
+	if err != nil {
+		log.Error(err.Error())
+	}
+
+	lastinsertid, err := stmt.LastInsertId()
+	if err != nil {
+		log.Error(err.Error())
+	}
+
+	err = bootstrap.Db().QueryRow("SELECT * FROM paintcans WHERE id = ?", lastinsertid).Scan(&pc.ID, &pc.Manufacturer, &pc.Color, &pc.CreatedAt, &pc.UpdatedAt)
+	if err != nil {
+		log.Error(err.Error())
+	}
+	return pc
 }
 
 // FindPaintCanByID find a paint can in table
 func FindPaintCanByID(id int) *models.PaintCan {
-	var cp models.PaintCan
+	var pc models.PaintCan
 
 	row := bootstrap.Db().QueryRow("SELECT * FROM paintcans WHERE id = ?;", id)
-	err := row.Scan(&cp.ID, &cp.Manufacturer, &cp.Color, &cp.CreatedAt, &cp.UpdatedAt)
+	err := row.Scan(&pc.ID, &pc.Manufacturer, &pc.Color, &pc.CreatedAt, &pc.UpdatedAt)
 
 	if err != nil {
 		log.Debug(err.Error())
 	}
 
-	return &cp
+	return &pc
 }
 
 // AllPaintCans get all paint cans

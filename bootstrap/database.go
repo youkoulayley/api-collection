@@ -22,7 +22,6 @@ func OpenDB(c *models.Conf) {
 	} else {
 		log.Info("Database - Successfully connected")
 	}
-
 	err = db.Ping()
 	if err != nil {
 		log.Error("Database - Failed to connect : ", err.Error())
