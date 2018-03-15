@@ -112,5 +112,7 @@ func PaintCansDelete(w http.ResponseWriter, r *http.Request) {
 	err = repositories.DeletePaintCanByID(id)
 	if err != nil {
 		log.Fatal(err)
+	} else {
+		json.NewEncoder(w).Encode(models.Heartbeat{Status: "OK", Code: 200})
 	}
 }

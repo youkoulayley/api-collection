@@ -9,5 +9,5 @@ import (
 
 // HeartbeatIndex return the status of the api
 func HeartbeatIndex(w http.ResponseWriter, r *http.Request) {
-	json.NewEncoder(w).Encode(models.Heartbeat{Status: "OK", Code: "200"})
+	json.NewEncoder(w).Encode(models.Heartbeat{Status: "OK", Code: 200})
 }
