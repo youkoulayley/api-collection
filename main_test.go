@@ -36,7 +36,7 @@ func TestEmptyTable(t *testing.T) {
 
 	checkResponseCode(t, http.StatusOK, response.Code)
 
-	if body := response.Body.String(); body != "[]" {
+	if body := response.Body.String(); body != "null\n" {
 		t.Errorf("Expected an empty array. Got %s", body)
 	}
 }

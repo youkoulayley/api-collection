@@ -12,7 +12,7 @@ var router *mux.Router
 // InitializeRouter do what is name tell he does
 func InitializeRouter() *mux.Router {
 	// StrictSlash is true => redirect /cars/ to /cars
-	router := mux.NewRouter().StrictSlash(true)
+	router = mux.NewRouter().StrictSlash(true)
 
 	log.Info("Routes - GET /status")
 	router.Methods("GET").Path("/status").Name("Status").HandlerFunc(controllers.HeartbeatIndex)
@@ -31,6 +31,7 @@ func InitializeRouter() *mux.Router {
 	return router
 }
 
+// Router is the getter
 func Router() *mux.Router {
 	return router
 }
