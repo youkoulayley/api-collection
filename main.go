@@ -5,6 +5,8 @@ import (
 
 	log "github.com/sirupsen/logrus"
 
+	"github.com/gorilla/handlers"
+
 	"github.com/youkoulayley/api-collection/bootstrap"
 	"github.com/youkoulayley/api-collection/databases/migrations"
 )
@@ -17,6 +19,8 @@ func main() {
 
 	router := InitializeRouter()
 
+	corsObj := handlers.AllowedOrigins([]string{"localhost"})
+
 	log.Info("Start to listen on ", c.Port, " ...")
-	log.Fatal(http.ListenAndServe(":"+c.Port, router))
+	log.Fatal(http.ListenAndServe(":"+c.Port, handlers.CORS(corsObj)(router)))
 }
