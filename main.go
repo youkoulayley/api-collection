@@ -1,7 +1,6 @@
 package main
 
 import (
-	"flag"
 	"net/http"
 
 	log "github.com/sirupsen/logrus"
@@ -13,18 +12,16 @@ import (
 )
 
 func main() {
-	confPath := flag.String("config", "./", "Path for the config file")
-	flag.Parse()
+	confPath := bootstrap.InitFlags()             // Init and parse the flags
+	c := bootstrap.GetConf(confPath, "conf.json") // Get conf and store it in var
+	bootstrap.InitLogs(c)                         // Init the logs
+	bootstrap.OpenDB(c)                           // Init the DB
+	migrations.LaunchMigrations()                 // Launch database migration
 
-	c := bootstrap.GetConf(*confPath, "conf.json")
-	bootstrap.InitLogs(c)
-	bootstrap.OpenDB(c)
-	migrations.LaunchMigrations()
+	router := InitializeRouter() // Init router
 
-	router := InitializeRouter()
-
-	corsObj := handlers.AllowedOrigins(c.AuthorizedHosts)
+	corsObj := handlers.AllowedOrigins(c.AuthorizedHosts) // Init CORS Header
 
 	log.Info("Start to listen on ", c.Port, " ...")
-	log.Fatal(http.ListenAndServe(":"+c.Port, handlers.CORS(corsObj)(router)))
+	log.Fatal(http.ListenAndServe(":"+c.Port, handlers.CORS(corsObj)(router))) // Serve the HTTP Server. Exit if fail.
 }
