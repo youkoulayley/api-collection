@@ -5,6 +5,7 @@
 |Name|Description|Value Type|
 |----|-----------|----------|
 |Port|Port for the application to listen on|string|
+|AuthorizedHosts|CORS Header for authorized hosts|[]string|
 |Database.MysqlHost|Host of the server mysql|string|
 |Database.MysqlPort|Port of the server mysql|string|
 |Database.MysqlUser|Host of the mysql database|string|

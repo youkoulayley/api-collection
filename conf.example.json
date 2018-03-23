@@ -1,5 +1,8 @@
 {
   "Port": "8080",
+  "AuthorizedHosts": [
+      "localhost"
+    ],
   "Database": {
     "MysqlHost": "localhost",
     "Mysqlport": "3306",

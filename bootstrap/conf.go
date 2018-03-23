@@ -9,8 +9,9 @@ import (
 )
 
 // GetConf get the config file
-func GetConf(c string) *models.Conf {
-	file, err := os.Open(c)
+func GetConf(confPath string, c string) *models.Conf {
+	log.Info("Conf - Path defined at ", confPath+c)
+	file, err := os.Open(confPath + c)
 	if err != nil {
 		// If the conf file is not loaded, we exit the app
 		log.Fatal("Conf - Failed to open file : ", err.Error())
