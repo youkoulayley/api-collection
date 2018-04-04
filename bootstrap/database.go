@@ -5,6 +5,7 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/postgres" // import specific
 	log "github.com/sirupsen/logrus"
 	"github.com/youkoulayley/api-collection/models"
+	"time"
 )
 
 var db *gorm.DB
@@ -24,11 +25,13 @@ func OpenDB(c *models.Conf) {
 		log.Info("Database - Configuration is right")
 	}
 	err = db.DB().Ping()
-	if err != nil {
+	for err != nil {
 		log.Error("Database - Failed to connect : ", err.Error())
-	} else {
-		log.Info("Database - Joinable")
+		log.Debug("Sleep 30s before retry")
+		time.Sleep(30 * time.Second)
+		err = db.DB().Ping()
 	}
+	log.Info("Database - Joinable")
 }
 
 // Db Getter for db var
