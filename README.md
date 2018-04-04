@@ -4,13 +4,14 @@
 
 |Name|Description|Value Type|
 |----|-----------|----------|
+|Version|Version of the application|string|
 |Port|Port for the application to listen on|string|
 |AuthorizedHosts|CORS Header for authorized hosts|[]string|
-|Database.MysqlHost|Host of the server mysql|string|
-|Database.MysqlPort|Port of the server mysql|string|
-|Database.MysqlUser|Host of the mysql database|string|
-|Database.MysqlPassword|Password of the mysql database|string|
-|Database.MysqlDatabase|Name of the mysql database|string|
+|Database.Host|Host of the database server|string|
+|Database.Port|Port of the database server|string|
+|Database.User|Host of the database|string|
+|Database.Password|Password of the database|string|
+|Database.Database|Name of the database|string|
 |Log.Formatter|Format of the logs|ascii/json|
 |Log.Output|Where the logs will be|stdout/stderr|
 |Log.Level|Level of logs|debug/info/warn/crit|
@@ -21,7 +22,12 @@ Two prerequisites :
   2. Mysql >= 5.7
 
 # Dev installation
+## Database
+```
+docker run -it -d -p 5432:5432 --restart=always -e POSTGRES_PASSWORD="apicollection" -e POSTGRES_USER="apicollection" -e POSTGRES_DB="api_collection" --name=postgres postgres
+```
 
+## App
 ```
 git clone https://github.com/youkoulayley/api-collection
 cd api-collection

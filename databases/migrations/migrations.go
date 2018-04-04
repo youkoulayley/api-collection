@@ -3,10 +3,11 @@ package migrations
 import (
 	log "github.com/sirupsen/logrus"
 	"github.com/youkoulayley/api-collection/bootstrap"
+	"github.com/youkoulayley/api-collection/models"
 )
 
 // LaunchMigrations launch all migrations that you want
 func LaunchMigrations() {
 	log.Info("Migrations - start")
-	CreatePaintCansTable(bootstrap.Db())
+	bootstrap.Db().AutoMigrate(&models.Conf{})
 }

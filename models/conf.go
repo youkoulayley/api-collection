@@ -2,14 +2,15 @@ package models
 
 // Conf is a model for configuration
 type Conf struct {
+	Version         string
 	Port            string
 	AuthorizedHosts []string
 	Database        struct {
-		MysqlHost     string
-		MysqlPort     string
-		MysqlUser     string
-		MysqlPassword string
-		MysqlDatabase string
+		Host     string
+		Port     string
+		User     string
+		Password string
+		Database string
 	}
 	Log struct {
 		Formatter string

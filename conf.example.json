@@ -1,15 +1,16 @@
 {
+  "Version": "1.0",
   "Port": "8080",
   "AuthorizedHosts": [
       "localhost"
     ],
   "Database": {
-    "MysqlHost": "localhost",
-    "Mysqlport": "3306",
-    "MysqlUser": "apicollection",
-    "MysqlPassword": "",
-    "MysqlDatabase": "apicollection",
-    "MysqlTest": "testapicollection"
+    "Host": "localhost",
+    "port": "5432",
+    "User": "apicollection",
+    "Password": "",
+    "Database": "apicollection",
+    "Test": "testapicollection"
   },
   "Log": {
     "Formatter": "ascii",

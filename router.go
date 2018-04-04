@@ -17,16 +17,16 @@ func InitializeRouter() *mux.Router {
 	log.Info("Routes - GET /status")
 	router.Methods("GET").Path("/status").Name("Status").HandlerFunc(controllers.HeartbeatIndex)
 
-	log.Info("Routes - GET /paintcans")
-	router.Methods("GET").Path("/paintcans").Name("Index").HandlerFunc(controllers.PaintCansIndex)
-	log.Info("Routes - POST /paintcans")
-	router.Methods("POST").Path("/paintcans").Name("Create").HandlerFunc(controllers.PaintCansCreate)
-	log.Info("Routes - GET /paintcans/{id}")
-	router.Methods("GET").Path("/paintcans/{id}").Name("Show").HandlerFunc(controllers.PaintCansShow)
-	log.Info("Routes - PUT /paintcans/{id}")
-	router.Methods("PUT").Path("/paintcans/{id}").Name("Update").HandlerFunc(controllers.PaintCansUpdate)
-	log.Info("Routes - DELETE /paintcans/{id}")
-	router.Methods("DELETE").Path("/paintcans/{id}").Name("Delete").HandlerFunc(controllers.PaintCansDelete)
+	// log.Info("Routes - GET /paintcans")
+	// router.Methods("GET").Path("/paintcans").Name("Index").HandlerFunc(controllers.PaintCansIndex)
+	// log.Info("Routes - POST /paintcans")
+	// router.Methods("POST").Path("/paintcans").Name("Create").HandlerFunc(controllers.PaintCansCreate)
+	// log.Info("Routes - GET /paintcans/{id}")
+	// router.Methods("GET").Path("/paintcans/{id}").Name("Show").HandlerFunc(controllers.PaintCansShow)
+	// log.Info("Routes - PUT /paintcans/{id}")
+	// router.Methods("PUT").Path("/paintcans/{id}").Name("Update").HandlerFunc(controllers.PaintCansUpdate)
+	// log.Info("Routes - DELETE /paintcans/{id}")
+	// router.Methods("DELETE").Path("/paintcans/{id}").Name("Delete").HandlerFunc(controllers.PaintCansDelete)
 
 	return router
 }

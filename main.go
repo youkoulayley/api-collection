@@ -14,9 +14,12 @@ import (
 func main() {
 	confPath := bootstrap.InitFlags()             // Init and parse the flags
 	c := bootstrap.GetConf(confPath, "conf.json") // Get conf and store it in var
-	bootstrap.InitLogs(c)                         // Init the logs
-	bootstrap.OpenDB(c)                           // Init the DB
-	migrations.LaunchMigrations()                 // Launch database migration
+
+	log.Info("Start the app in v", c.Version)
+
+	bootstrap.InitLogs(c)         // Init the logs
+	bootstrap.OpenDB(c)           // Init the DB
+	migrations.LaunchMigrations() // Launch database migration
 
 	router := InitializeRouter() // Init router
 

@@ -1,14 +1,13 @@
 package bootstrap
 
 import (
-	"database/sql"
-
-	_ "github.com/go-sql-driver/mysql" // Import Mysql specific
+	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/postgres" // import specific
 	log "github.com/sirupsen/logrus"
 	"github.com/youkoulayley/api-collection/models"
 )
 
-var db *sql.DB
+var db *gorm.DB
 
 // OpenDB create the connection to database
 func OpenDB(c *models.Conf) {
@@ -16,13 +15,15 @@ func OpenDB(c *models.Conf) {
 
 	d := c.Database
 
-	db, err = sql.Open("mysql", d.MysqlUser+":"+d.MysqlPassword+"@tcp("+d.MysqlHost+":"+d.MysqlPort+")/"+d.MysqlDatabase+"?charset=utf8&parseTime=True")
+	connString := "postgres://" + d.User + ":" + d.Password + "@" + d.Host + ":" + d.Port + "/" + d.Database + "?sslmode=disable"
+
+	db, err = gorm.Open("postgres", connString)
 	if err != nil {
 		log.Error("Database - Failed to open connection : ", err.Error())
 	} else {
-		log.Info("Database - Successfully connected")
+		log.Info("Database - Configuration is right")
 	}
-	err = db.Ping()
+	err = db.DB().Ping()
 	if err != nil {
 		log.Error("Database - Failed to connect : ", err.Error())
 	} else {
@@ -31,6 +32,6 @@ func OpenDB(c *models.Conf) {
 }
 
 // Db Getter for db var
-func Db() *sql.DB {
+func Db() *gorm.DB {
 	return db
 }
