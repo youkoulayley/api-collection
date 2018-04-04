@@ -1,10 +1,10 @@
 package controllers
 
 import (
-	"encoding/json"
-	"net/http"
+"encoding/json"
+"net/http"
 
-	"github.com/youkoulayley/api-collection/models"
+"github.com/youkoulayley/api-collection/models"
 )
 
 // HeartbeatIndex return the status of the api

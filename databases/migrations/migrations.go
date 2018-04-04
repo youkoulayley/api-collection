@@ -9,5 +9,6 @@ import (
 // LaunchMigrations launch all migrations that you want
 func LaunchMigrations() {
 	log.Info("Migrations - start")
-	bootstrap.Db().AutoMigrate(&models.Conf{})
+	bootstrap.Db().AutoMigrate(&models.Role{})
+	bootstrap.Db().AutoMigrate(&models.User{}).AddForeignKey("role_id", "roles(id)", "CASCADE", "RESTRICT")
 }
