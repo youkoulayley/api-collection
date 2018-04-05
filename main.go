@@ -8,7 +8,6 @@ import (
 	"github.com/gorilla/handlers"
 
 	"github.com/youkoulayley/api-collection/bootstrap"
-	"github.com/youkoulayley/api-collection/databases/migrations"
 )
 
 func main() {
@@ -17,9 +16,9 @@ func main() {
 
 	log.Info("Start the app in v", c.Version)
 
-	bootstrap.InitLogs(c)         // Init the logs
-	bootstrap.OpenDB(c)           // Init the DB
-	migrations.LaunchMigrations() // Launch database migration
+	bootstrap.InitLogs(c)        	 // Init the logs
+	bootstrap.OpenDB(c)           	// Init the DB
+	bootstrap.LaunchMigrations()	// Launch database migration
 
 	router := InitializeRouter() // Init router
 

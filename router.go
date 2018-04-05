@@ -15,10 +15,10 @@ func InitializeRouter() *mux.Router {
 	router = mux.NewRouter().StrictSlash(true)
 
 	log.Info("Routes - GET /status")
-	router.Methods("GET").Path("/status").Name("Status").HandlerFunc(controllers.HeartbeatIndex)
+	router.Methods("GET").Path("/status").Name("status").HandlerFunc(controllers.HeartbeatIndex)
 
-	// log.Info("Routes - GET /paintcans")
-	// router.Methods("GET").Path("/paintcans").Name("Index").HandlerFunc(controllers.PaintCansIndex)
+	log.Info("Routes - GET /roles")
+	router.Methods("GET").Path("/roles").Name("role.index").HandlerFunc(controllers.RoleIndex)
 	// log.Info("Routes - POST /paintcans")
 	// router.Methods("POST").Path("/paintcans").Name("Create").HandlerFunc(controllers.PaintCansCreate)
 	// log.Info("Routes - GET /paintcans/{id}")
