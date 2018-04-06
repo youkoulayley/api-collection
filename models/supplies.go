@@ -6,6 +6,7 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
+// Supply struct
 type Supply struct {
 	gorm.Model
 	SupplyTypeID int

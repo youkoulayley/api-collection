@@ -2,6 +2,7 @@ package models
 
 import "github.com/jinzhu/gorm"
 
+// Video struct
 type Video struct {
 	gorm.Model
 	Name        string `gorm:"type:varchar(100)"`
