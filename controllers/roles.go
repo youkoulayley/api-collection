@@ -1,24 +1,55 @@
 package controllers
 
 import (
+	"encoding/json"
+	"io/ioutil"
 	"net/http"
-	"github.com/youkoulayley/api-collection/repositories"
+
 	log "github.com/sirupsen/logrus"
+	"github.com/youkoulayley/api-collection/models"
+	"github.com/youkoulayley/api-collection/repositories"
 )
 
+// RoleIndex define the logic for the routes GET /roles
 func RoleIndex(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-type", "application/json;charset=UTF-8")
 	w.WriteHeader(http.StatusOK)
 
-	log.Info(repositories.RolesGetAll())
+	roles := repositories.RolesGetAll()
+
+	json.NewEncoder(w).Encode(roles)
+
 }
 
-//func PaintCansIndex(w http.ResponseWriter, r *http.Request) {
-//	w.Header().Set("Content-type", "application/json;charset=UTF-8")
-//	w.WriteHeader(http.StatusOK)
-//
-//	json.NewEncoder(w).Encode(repositories.AllPaintCans())
-//}
+// RoleCreate define the logic for the routes POST /roles
+func RoleCreate(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-type", "application/json;charset=UTF-8")
+	w.WriteHeader(http.StatusOK)
+
+	body, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		log.Error(err)
+	}
+
+	var role models.Role
+
+	err = json.Unmarshal(body, &role)
+	if err != nil {
+		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+		w.WriteHeader(422)
+		if err = json.NewEncoder(w).Encode(err); err != nil {
+			log.Error(err.Error())
+		}
+	} else {
+		repositories.RoleCreate(&role)
+		if role.ID != 0 {
+			json.NewEncoder(w).Encode(role)
+		} else {
+			json.NewEncoder(w).Encode("message: Error when creating the role")
+		}
+	}
+}
+
 //
 //// PaintCansCreate create a new paint can
 //func PaintCansCreate(w http.ResponseWriter, r *http.Request) {

@@ -19,8 +19,8 @@ func InitializeRouter() *mux.Router {
 
 	log.Info("Routes - GET /roles")
 	router.Methods("GET").Path("/roles").Name("role.index").HandlerFunc(controllers.RoleIndex)
-	// log.Info("Routes - POST /paintcans")
-	// router.Methods("POST").Path("/paintcans").Name("Create").HandlerFunc(controllers.PaintCansCreate)
+	log.Info("Routes - POST /roles")
+	router.Methods("POST").Path("/roles").Name("role.create").HandlerFunc(controllers.RoleCreate)
 	// log.Info("Routes - GET /paintcans/{id}")
 	// router.Methods("GET").Path("/paintcans/{id}").Name("Show").HandlerFunc(controllers.PaintCansShow)
 	// log.Info("Routes - PUT /paintcans/{id}")
