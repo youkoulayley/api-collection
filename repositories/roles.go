@@ -30,7 +30,7 @@ func RoleCreate(r *models.Role) error {
 		if count == 0 {
 			err := bootstrap.Db().Create(&r).Error
 			if err != nil {
-				return errors.New("error when creating role")
+				return errors.New(err.Error())
 			}
 		}
 	} else {
@@ -56,7 +56,7 @@ func RoleUpdate(r *models.Role) error {
 		if count == 0 {
 			err := bootstrap.Db().Save(r).Error
 			if err != nil {
-				log.Error(err)
+				return errors.New(err.Error())
 			}
 		} else {
 			return errors.New("role with this name already exists")
@@ -70,7 +70,7 @@ func RoleUpdate(r *models.Role) error {
 func RoleDelete(r *models.Role) error {
 	err := bootstrap.Db().Delete(&r).Error
 	if err != nil {
-		return errors.New("failed to delete role record")
+		return errors.New(err.Error())
 	}
 	return nil
 }
