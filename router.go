@@ -21,12 +21,12 @@ func InitializeRouter() *mux.Router {
 	router.Methods("GET").Path("/roles").Name("role.index").HandlerFunc(controllers.RoleIndex)
 	log.Info("Routes - POST /roles")
 	router.Methods("POST").Path("/roles").Name("role.create").HandlerFunc(controllers.RoleCreate)
-	// log.Info("Routes - GET /paintcans/{id}")
-	// router.Methods("GET").Path("/paintcans/{id}").Name("Show").HandlerFunc(controllers.PaintCansShow)
-	// log.Info("Routes - PUT /paintcans/{id}")
-	// router.Methods("PUT").Path("/paintcans/{id}").Name("Update").HandlerFunc(controllers.PaintCansUpdate)
-	// log.Info("Routes - DELETE /paintcans/{id}")
-	// router.Methods("DELETE").Path("/paintcans/{id}").Name("Delete").HandlerFunc(controllers.PaintCansDelete)
+	log.Info("Routes - GET /roles/{id}")
+	router.Methods("GET").Path("/roles/{id}").Name("role.show").HandlerFunc(controllers.RoleShow)
+	log.Info("Routes - PUT /roles/{id}")
+	router.Methods("PUT").Path("/roles/{id}").Name("role.update").HandlerFunc(controllers.RoleUpdate)
+	log.Info("Routes - DELETE /roles/{id}")
+	router.Methods("DELETE").Path("/roles/{id}").Name("role.delete").HandlerFunc(controllers.RoleDelete)
 
 	return router
 }

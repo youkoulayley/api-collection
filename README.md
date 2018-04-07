@@ -24,7 +24,7 @@ Two prerequisites :
 # Dev installation
 ## Database
 ```
-docker run -it -d -p 5432:5432 --restart=always -e POSTGRES_PASSWORD="apicollection" -e POSTGRES_USER="apicollection" -e POSTGRES_DB="api_collection" --name=postgres postgres
+docker run -it -d -p 5433:5432 --restart=always -e POSTGRES_PASSWORD="apicollection" -e POSTGRES_USER="apicollection" -e POSTGRES_DB="api_collection" --name=postgres postgres
 ```
 
 ## App

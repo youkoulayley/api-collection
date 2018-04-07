@@ -4,6 +4,7 @@ import (
 	log "github.com/sirupsen/logrus"
 	"github.com/youkoulayley/api-collection/bootstrap"
 	"github.com/youkoulayley/api-collection/models"
+	"errors"
 )
 
 // RolesGetAll fetch all roles
@@ -16,68 +17,60 @@ func RolesGetAll() []models.Role {
 }
 
 // RoleCreate create a new role
-func RoleCreate(r *models.Role) {
+func RoleCreate(r *models.Role) error {
 	if r == nil {
 		log.Error(r)
 	}
 
-	// Check if role already exists
-	var count uint
-	bootstrap.Db().Where("name = ?", r.Name).Find(&models.Role{}).Count(&count)
+	if r.Name != "" {
+		// Check if role already exists
+		var count uint
+		bootstrap.Db().Where("name = ?", r.Name).Find(&models.Role{}).Count(&count)
 
-	if count == 0 {
-		err := bootstrap.Db().Create(&r).Error
-		if err != nil {
-			log.Error(err)
+		if count == 0 {
+			err := bootstrap.Db().Create(&r).Error
+			if err != nil {
+				return errors.New("error when creating role")
+			}
 		}
+	} else {
+		return errors.New("role with empty name if forbidden")
 	}
+	return nil
 }
 
-//
-//// FindPaintCanByID find a paint can in table
-//func FindPaintCanByID(id int) *models.PaintCan {
-//	var pc models.PaintCan
-//
-//	row := bootstrap.Db().QueryRow("SELECT * FROM paintcans WHERE id = ?;", id)
-//	err := row.Scan(&pc.ID, &pc.Manufacturer, &pc.Color, &pc.CreatedAt, &pc.UpdatedAt)
-//
-//	if err != nil {
-//		log.Debug(err.Error())
-//	}
-//
-//	return &pc
-//}
-//
-//
-//	return &pcs
-//}
-//
-//// UpdatePaintCan update a paint can in table
-//func UpdatePaintCan(pc *models.PaintCan) {
-//	pc.UpdatedAt = time.Now()
-//
-//	stmt, err := bootstrap.Db().Prepare("UPDATE paintcans SET manufacturer=?, color=?, updated_at=? WHERE id=?;")
-//
-//	if err != nil {
-//		log.Debug(err)
-//	}
-//
-//	_, err = stmt.Exec(pc.Manufacturer, pc.Color, pc.UpdatedAt, pc.ID)
-//
-//	if err != nil {
-//		log.Debug(err)
-//	}
-//}
-//
-//// DeletePaintCanByID delete one paintcan
-//func DeletePaintCanByID(id int) error {
-//	stmt, err := bootstrap.Db().Prepare("DELETE FROM paintcans WHERE id=?;")
-//
-//	if err != nil {
-//		log.Debug(err)
-//	}
-//
-//	_, err = stmt.Exec(id)
-//
-//	return err
-//}
+func RoleGetByID(id int) *models.Role {
+	var role models.Role
+
+	bootstrap.Db().First(&role, id)
+
+	return &role
+}
+
+func RoleUpdate(r *models.Role) error {
+	if r.Name != "" {
+		// Check if name already exists
+		var count uint
+		bootstrap.Db().Where("name = ? AND id <> ?", r.Name, r.ID).Find(&models.Role{}).Count(&count)
+
+		if count == 0 {
+			err := bootstrap.Db().Save(r).Error
+			if err != nil {
+				log.Error(err)
+			}
+		} else {
+			return errors.New("role with this name already exists")
+		}
+	} else {
+		return errors.New("role with empty name if forbidden")
+	}
+	return nil
+}
+
+func RoleDelete(r *models.Role) error {
+	err := bootstrap.Db().Delete(&r).Error
+	if err != nil {
+		return errors.New("failed to delete role record")
+	}
+	return nil
+}

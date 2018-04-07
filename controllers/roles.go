@@ -8,6 +8,8 @@ import (
 	log "github.com/sirupsen/logrus"
 	"github.com/youkoulayley/api-collection/models"
 	"github.com/youkoulayley/api-collection/repositories"
+	"github.com/gorilla/mux"
+	"strconv"
 )
 
 // RoleIndex define the logic for the routes GET /roles
@@ -36,116 +38,97 @@ func RoleCreate(w http.ResponseWriter, r *http.Request) {
 	err = json.Unmarshal(body, &role)
 	if err != nil {
 		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-		w.WriteHeader(422)
+		w.WriteHeader(http.StatusUnprocessableEntity)
 		if err = json.NewEncoder(w).Encode(err); err != nil {
 			log.Error(err.Error())
 		}
 	} else {
-		repositories.RoleCreate(&role)
-		if role.ID != 0 {
-			json.NewEncoder(w).Encode(role)
+		err = repositories.RoleCreate(&role)
+		if err != nil {
+			err := models.JSONError{Message: err.Error(), Code: 403}
+			json.NewEncoder(w).Encode(err)
 		} else {
-			json.NewEncoder(w).Encode("message: Error when creating the role")
+			if role.ID != 0 {
+				json.NewEncoder(w).Encode(role)
+			} else {
+				err := models.JSONError{Message: "Error when creating model", Code: 422}
+				json.NewEncoder(w).Encode(err)
+			}
 		}
 	}
 }
 
-//
-//// PaintCansCreate create a new paint can
-//func PaintCansCreate(w http.ResponseWriter, r *http.Request) {
-//	w.Header().Set("Content-type", "application/json;charset=UTF-8")
-//	w.WriteHeader(http.StatusOK)
-//
-//	body, err := ioutil.ReadAll(r.Body)
-//
-//	if err != nil {
-//		log.Error(err)
-//	}
-//
-//	var paintcan models.PaintCan
-//
-//	err = json.Unmarshal(body, &paintcan)
-//	if err != nil {
-//		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-//		w.WriteHeader(422) // unprocessable entity
-//		if err = json.NewEncoder(w).Encode(err); err != nil {
-//			log.Error(err.Error())
-//		}
-//	} else {
-//		repositories.NewPaintCan(&paintcan)
-//		json.NewEncoder(w).Encode(paintcan)
-//	}
-//}
-//
-//// PaintCansShow get one pain can in the database
-//func PaintCansShow(w http.ResponseWriter, r *http.Request) {
-//	w.Header().Set("Content-type", "application/json;charset=UTF-8")
-//	w.WriteHeader(http.StatusOK)
-//
-//	vars := mux.Vars(r)
-//	id, err := strconv.Atoi(vars["id"])
-//
-//	if err != nil {
-//		log.Error(err.Error())
-//	}
-//
-//	paintcan := repositories.FindPaintCanByID(id)
-//
-//	if paintcan.ID == 0 {
-//		json.NewEncoder(w).Encode(models.Heartbeat{Status: "Not Found", Code: 404})
-//	} else {
-//		json.NewEncoder(w).Encode(paintcan)
-//	}
-//}
-//
-////PaintCansUpdate update a record
-//func PaintCansUpdate(w http.ResponseWriter, r *http.Request) {
-//	w.Header().Set("Content-type", "application/json;charset=UTF-8")
-//	w.WriteHeader(http.StatusOK)
-//
-//	vars := mux.Vars(r)
-//	id, err := strconv.Atoi(vars["id"])
-//
-//	if err != nil {
-//		log.Error(err.Error())
-//	}
-//
-//	body, err := ioutil.ReadAll(r.Body)
-//
-//	if err != nil {
-//		log.Error(err.Error())
-//	}
-//
-//	paintcan := repositories.FindPaintCanByID(id)
-//
-//	err = json.Unmarshal(body, &paintcan)
-//	if err != nil {
-//		log.Error(err.Error())
-//	}
-//
-//	repositories.UpdatePaintCan(paintcan)
-//
-//	json.NewEncoder(w).Encode(paintcan)
-//}
-//
-//// PaintCansDelete delete a record
-//func PaintCansDelete(w http.ResponseWriter, r *http.Request) {
-//	w.Header().Set("Content-type", "application/json;charset=UTF-8")
-//	w.WriteHeader(http.StatusOK)
-//
-//	vars := mux.Vars(r)
-//
-//	// strconv.Atoi is shorthand for ParseInt
-//	id, err := strconv.Atoi(vars["id"])
-//
-//	if err != nil {
-//		log.Error(err)
-//	}
-//
-//	err = repositories.DeletePaintCanByID(id)
-//	if err != nil {
-//		log.Error(err.Error())
-//	} else {
-//		json.NewEncoder(w).Encode(models.Heartbeat{Status: "OK", Code: 200})
-//	}
-//}
+// RoleShow contains the logic to display a specific role
+func RoleShow(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-type", "application/json;charset=UTF-8")
+	w.WriteHeader(http.StatusOK)
+
+	vars := mux.Vars(r)
+	id, err := strconv.Atoi(vars["id"])
+	if err != nil {
+		log.Error(err)
+	}
+
+	role := repositories.RoleGetByID(id)
+	if role.ID == 0 {
+		json.NewEncoder(w).Encode(models.JSONError{Message: "Role Not Found", Code: 404})
+	} else {
+		json.NewEncoder(w).Encode(role)
+	}
+}
+
+func RoleUpdate(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-type", "application/json;charset=UTF-8")
+	w.WriteHeader(http.StatusOK)
+
+	vars := mux.Vars(r)
+	id, err := strconv.Atoi(vars["id"])
+	if err != nil {
+		log.Error(err)
+	}
+
+	body, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		log.Error(err.Error())
+	}
+
+	role := repositories.RoleGetByID(id)
+	if role.ID == 0 {
+		json.NewEncoder(w).Encode(models.JSONError{Message: "Role Not Found", Code: 404})
+	} else {
+		err = json.Unmarshal(body, &role)
+		if err != nil {
+			log.Error(err.Error())
+		}
+
+		err = repositories.RoleUpdate(role)
+		if err != nil {
+			json.NewEncoder(w).Encode(models.JSONError{Message: err.Error(), Code: 403})
+		} else {
+			json.NewEncoder(w).Encode(role)
+		}
+	}
+}
+
+func RoleDelete(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-type", "application/json;charset=UTF-8")
+	w.WriteHeader(http.StatusOK)
+
+	vars := mux.Vars(r)
+	id, err := strconv.Atoi(vars["id"])
+	if err != nil {
+		log.Error(err)
+	}
+
+	role := repositories.RoleGetByID(id)
+	if role.ID == 0 {
+		json.NewEncoder(w).Encode(models.JSONError{Message: "Role Not Found", Code: 404})
+	} else {
+		err = repositories.RoleDelete(role)
+		if err != nil {
+			json.NewEncoder(w).Encode(models.JSONError{Message: err.Error(), Code: 403})
+		} else {
+			json.NewEncoder(w).Encode(models.JSONError{Message: "Role successfully deleted", Code: 200})
+		}
+	}
+}
