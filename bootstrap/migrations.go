@@ -18,13 +18,13 @@ func LaunchMigrations() {
 				     &models.Video{})
 
 	log.Info("Migrations - add foreign keys")
-	gormfk.BelongsToFIndex(Db(), &models.User{}, &models.Role{})
-	gormfk.BelongsToFIndex(Db(), &models.Channel{}, &models.User{})
-	gormfk.BelongsToFIndex(Db(), &models.Supply{}, &models.SupplyType{})
-	gormfk.BelongsToFIndex(Db(), &models.Playlist{}, &models.Channel{})
-	gormfk.Many2ManyFIndex(Db(), &models.Channel{}, &models.User{})
-	gormfk.Many2ManyFIndex(Db(), &models.Playlist{}, &models.Video{})
-	gormfk.Many2ManyFIndex(Db(), &models.Supply{}, &models.Video{})
+	gormfk.BelongsTo(Db(), &models.User{}, &models.Role{})
+	gormfk.BelongsTo(Db(), &models.Channel{}, &models.User{})
+	gormfk.BelongsTo(Db(), &models.Supply{}, &models.SupplyType{})
+	gormfk.BelongsTo(Db(), &models.Playlist{}, &models.Channel{})
+	gormfk.Many2Many(Db(), &models.Channel{}, &models.User{})
+	gormfk.Many2Many(Db(), &models.Playlist{}, &models.Video{})
+	gormfk.Many2Many(Db(), &models.Supply{}, &models.Video{})
 
 	log.Info("Migrations - end")
 }
