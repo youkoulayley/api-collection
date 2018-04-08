@@ -4,7 +4,11 @@ package models
 type Conf struct {
 	Version         string
 	Port            string
-	AuthorizedHosts []string
+	Cors struct {
+		AuthorizedHosts []string
+		AuthorizedMethods []string
+		AuthorizedHeaders []string
+	}
 	Database        struct {
 		Host     string
 		Port     string

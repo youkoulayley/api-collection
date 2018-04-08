@@ -22,11 +22,11 @@ func InitializeRouter() *mux.Router {
 	log.Info("Routes - POST /roles")
 	router.Methods("POST").Path("/roles").Name("role.create").HandlerFunc(controllers.RoleCreate)
 	log.Info("Routes - GET /roles/{id}")
-	router.Methods("GET").Path("/roles/{id}").Name("role.show").HandlerFunc(controllers.RoleShow)
+	router.Methods("GET").Path("/roles/{id:[0-9]+}").Name("role.show").HandlerFunc(controllers.RoleShow)
 	log.Info("Routes - PUT /roles/{id}")
-	router.Methods("PUT").Path("/roles/{id}").Name("role.update").HandlerFunc(controllers.RoleUpdate)
+	router.Methods("PUT").Path("/roles/{id:[0-9]+}").Name("role.update").HandlerFunc(controllers.RoleUpdate)
 	log.Info("Routes - DELETE /roles/{id}")
-	router.Methods("DELETE").Path("/roles/{id}").Name("role.delete").HandlerFunc(controllers.RoleDelete)
+	router.Methods("DELETE").Path("/roles/{id:[0-9]+}").Name("role.delete").HandlerFunc(controllers.RoleDelete)
 
 	return router
 }

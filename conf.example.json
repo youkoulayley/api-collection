@@ -4,6 +4,9 @@
   "AuthorizedHosts": [
       "localhost"
     ],
+  "AuthorizedMethods": [
+    "*"
+  ],
   "Database": {
     "Host": "localhost",
     "port": "5432",

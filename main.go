@@ -22,8 +22,11 @@ func main() {
 
 	router := InitializeRouter() // Init router
 
-	corsObj := handlers.AllowedOrigins(c.AuthorizedHosts) // Init CORS Header
+	// CORS HEADERS
+	corsAllowedOrigins := handlers.AllowedOrigins(c.Cors.AuthorizedHosts) // Authorized hosts
+	corsAllowedMethods := handlers.AllowedMethods(c.Cors.AuthorizedMethods) // Authorized methods
+	corsAllowedHeaders := handlers.AllowedHeaders(c.Cors.AuthorizedHeaders) // Authorized headers
 
 	log.Info("Start to listen on ", c.Port, " ...")
-	log.Fatal(http.ListenAndServe(":"+c.Port, handlers.CORS(corsObj)(router))) // Serve the HTTP Server. Exit if fail.
+	log.Fatal(http.ListenAndServe(":"+c.Port, handlers.CORS(corsAllowedOrigins, corsAllowedMethods, corsAllowedHeaders)(router))) // Serve the HTTP Server. Exit if fail.
 }
