@@ -1,12 +1,17 @@
 {
   "Version": "1.0",
   "Port": "8080",
-  "AuthorizedHosts": [
-      "localhost"
+  "Cors": {
+    "AuthorizedHosts": [
+      "*"
     ],
-  "AuthorizedMethods": [
-    "*"
-  ],
+    "AuthorizedMethods": [
+      "GET", "POST", "PUT", "DELETE"
+    ],
+    "AuthorizedHeaders": [
+      "X-Requested-With", "Accept", "Content-Type", "Content-Length", "Accept-Encoding", "X-CSRF-Token", "Authorization"
+    ]
+  },
   "Database": {
     "Host": "localhost",
     "port": "5432",
