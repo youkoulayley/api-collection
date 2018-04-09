@@ -19,7 +19,7 @@
 # Prerequisites
 Two prerequisites :
   1. Go >= 1.10
-  2. Mysql >= 5.7
+  2. Postgres >= 10
 
 # Dev installation
 ## Database
