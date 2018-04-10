@@ -16,14 +16,14 @@ func main() {
 
 	log.Info("Start the app in v", c.Version)
 
-	bootstrap.InitLogs(c)        	 // Init the logs
-	bootstrap.OpenDB(c)           	// Init the DB
-	bootstrap.LaunchMigrations()	// Launch database migration
+	bootstrap.InitLogs(c)        // Init the logs
+	bootstrap.OpenDB(c)          // Init the DB
+	bootstrap.LaunchMigrations() // Launch database migration
 
 	router := InitializeRouter() // Init router
 
 	// CORS HEADERS
-	corsAllowedOrigins := handlers.AllowedOrigins(c.Cors.AuthorizedHosts) // Authorized hosts
+	corsAllowedOrigins := handlers.AllowedOrigins(c.Cors.AuthorizedHosts)   // Authorized hosts
 	corsAllowedMethods := handlers.AllowedMethods(c.Cors.AuthorizedMethods) // Authorized methods
 	corsAllowedHeaders := handlers.AllowedHeaders(c.Cors.AuthorizedHeaders) // Authorized headers
 

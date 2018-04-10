@@ -17,6 +17,10 @@ func InitializeRouter() *mux.Router {
 	log.Info("Routes - GET /status")
 	router.Methods("GET").Path("/status").Name("status").HandlerFunc(controllers.HeartbeatIndex)
 
+	log.Info("Routes - POST /token")
+	router.Methods("POST").Path("/token").Name("token").HandlerFunc(controllers.TokenGet)
+
+	// ROLES
 	log.Info("Routes - GET /roles")
 	router.Methods("GET").Path("/roles").Name("role.index").HandlerFunc(controllers.RoleIndex)
 	log.Info("Routes - POST /roles")
@@ -27,6 +31,18 @@ func InitializeRouter() *mux.Router {
 	router.Methods("PUT").Path("/roles/{id:[0-9]+}").Name("role.update").HandlerFunc(controllers.RoleUpdate)
 	log.Info("Routes - DELETE /roles/{id}")
 	router.Methods("DELETE").Path("/roles/{id:[0-9]+}").Name("role.delete").HandlerFunc(controllers.RoleDelete)
+
+	// USERS
+	// log.Info("Routes - GET /users")
+	// router.Methods("GET").Path("/users").Name("user.index").HandlerFunc(controllers.UserIndex)
+	// log.Info("Routes - POST /users")
+	// router.Methods("POST").Path("/users").Name("user.create").HandlerFunc(controllers.UserCreate)
+	log.Info("Routes - GET /users/{id}")
+	router.Methods("GET").Path("/users/{id:[0-9]+}").Name("user.show").HandlerFunc(controllers.UserShow)
+	// log.Info("Routes - PUT /users/{id}")
+	// router.Methods("PUT").Path("/users/{id:[0-9]+}").Name("user.update").HandlerFunc(controllers.UserUpdate)
+	// log.Info("Routes - DELETE /users/{id}")
+	// router.Methods("DELETE").Path("/users/{id:[0-9]+}").Name("user.delete").HandlerFunc(controllers.UserDelete)
 
 	return router
 }
