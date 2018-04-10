@@ -1,10 +1,8 @@
 package models
 
-import "github.com/jinzhu/gorm"
-
 // Playlist struct
 type Playlist struct {
-	gorm.Model
+	Model
 	Name        string `gorm:"type:varchar(50)"`
 	Description string `gorm:"type:text"`
 	ChannelID   int

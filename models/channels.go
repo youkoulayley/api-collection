@@ -1,12 +1,8 @@
 package models
 
-import (
-	"github.com/jinzhu/gorm"
-)
-
 // Channel struct
 type Channel struct {
-	gorm.Model
+	Model
 	Name        string `json:"name,omitempty" gorm:"type:varchar(20);unique_index"`
 	Description string `json:"description,omitempty" gorm:"type:text"`
 	URL         string `json:"url,omitempty" gorm:"type:varchar(255);unique_index"`
