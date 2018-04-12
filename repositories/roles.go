@@ -11,7 +11,7 @@ import (
 func RolesGetAll() []models.Role {
 	var r []models.Role
 
-	bootstrap.Db().Find(&r)
+	bootstrap.Db().Preload("User").Find(&r)
 
 	return r
 }

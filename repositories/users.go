@@ -11,7 +11,10 @@ import (
 func UsersGetAll() []models.User {
 	var u []models.User
 
-	bootstrap.Db().Find(&u)
+	err := bootstrap.Db().Preload("Role").Find(&u).Error
+	if err != nil {
+		log.Error(err)
+	}
 
 	return u
 }
@@ -56,4 +59,13 @@ func UserGetByUsername(username string) *models.User {
 	bootstrap.Db().Where("name = ?", username).First(&user)
 
 	return &user
+}
+
+// UserGetRole fetch the role of a particular user
+func UserGetRole(u *models.User) *models.Role {
+	var role models.Role
+
+	bootstrap.Db().Model(&u).Related(&role)
+
+	return &role
 }

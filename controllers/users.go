@@ -76,3 +76,26 @@ func UserShow(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(user)
 	}
 }
+
+func UserGetRole(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-type", "application/json;charset=UTF-8")
+	w.WriteHeader(http.StatusOK)
+
+	vars := mux.Vars(r)
+	id, err := strconv.Atoi(vars["id"])
+	if err != nil {
+		log.Error(err)
+	}
+
+	user := repositories.UserGetByID(id)
+	if user.ID == 0 {
+		json.NewEncoder(w).Encode(models.JSONError{Message: "User Not Found", Code: 404})
+	} else {
+		role := repositories.UserGetRole(user)
+		if role.ID == 0 {
+			json.NewEncoder(w).Encode(models.JSONError{Message: "User Not Found", Code: 404})
+		} else {
+			json.NewEncoder(w).Encode(role)
+		}
+	}
+}

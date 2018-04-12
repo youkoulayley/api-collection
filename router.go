@@ -39,6 +39,8 @@ func InitializeRouter() *mux.Router {
 	router.Methods("POST").Path("/users").Name("user.create").HandlerFunc(controllers.UserCreate)
 	log.Info("Routes - GET /users/{id}")
 	router.Methods("GET").Path("/users/{id:[0-9]+}").Name("user.show").HandlerFunc(controllers.UserShow)
+	log.Info("Routes - Get /users/{id}/role/")
+	router.Methods("GET").Path("/users/{id:[0-9]+}/role").Name("user.role").HandlerFunc(controllers.UserGetRole)
 	// log.Info("Routes - PUT /users/{id}")
 	// router.Methods("PUT").Path("/users/{id:[0-9]+}").Name("user.update").HandlerFunc(controllers.UserUpdate)
 	// log.Info("Routes - DELETE /users/{id}")
