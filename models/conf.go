@@ -9,6 +9,7 @@ type Conf struct {
 		AuthorizedMethods []string
 		AuthorizedHeaders []string
 	}
+	JWTSalt 		string
 	Database        struct {
 		Host     string
 		Port     string

@@ -12,6 +12,7 @@
       "X-Requested-With", "Accept", "Content-Type", "Content-Length", "Accept-Encoding", "X-CSRF-Token", "Authorization"
     ]
   },
+  "JWTSalt": "`@3C[BBB7 Jt[aD~3-:oo|a7<-C=CAku(ixnU)jP.G$)}@FV fWS(B{:`ITgjVPA",
   "Database": {
     "Host": "localhost",
     "port": "5432",

@@ -8,6 +8,9 @@ import (
 	"encoding/json"
 	"github.com/youkoulayley/api-collection/repositories"
 	"github.com/youkoulayley/api-collection/models"
+
+	"github.com/dgrijalva/jwt-go"
+	"time"
 )
 
 // Token struct contain the format for getting token
@@ -16,6 +19,13 @@ type Token struct {
 	Password string
 }
 
+type TokenString struct {
+	Token 	string
+}
+
+var JwtSalt []byte
+
+// HashPassword use the bcrypt generateFromPassword function but take a string parameters instead of a byte table.
 func HashPassword(password string) string {
 	bytePassword := []byte(password)
 
@@ -25,6 +35,19 @@ func HashPassword(password string) string {
 	}
 
 	return string(hashedPassword)
+}
+
+// CompareHashPassword use the bcrypt CompareHashAndPassword function but take strings in parameters instead of bytes
+func CompareHashPassword(hash string, password string) bool {
+	hashByte := []byte(hash)
+	passwordByte := []byte(password)
+
+
+	err := bcrypt.CompareHashAndPassword(hashByte, passwordByte)
+	if err != nil {
+		return false
+	}
+	return true
 }
 
 // TokenGet has the logic to generate a token for user
@@ -50,10 +73,20 @@ func TokenGet(w http.ResponseWriter, r *http.Request) {
 	if user.ID == 0 {
 		json.NewEncoder(w).Encode(models.JSONError{Message: "User Not Found", Code: 404})
 	} else {
-		err = bcrypt.CompareHashAndPassword([]byte(user.Password),[]byte(tokenGet.Password))
-		log.Info(err)
-		if err == nil {
-			json.NewEncoder(w).Encode(models.JSONError{Message: "Authorized", Code: 202})
+		compare := CompareHashPassword(user.Password, tokenGet.Password)
+		if compare {
+			token := jwt.New(jwt.SigningMethodHS256)
+			claims := token.Claims.(jwt.MapClaims)
+
+			claims["username"] = user.Username
+			claims["role"] = user.RoleID
+			claims["exp"] = time.Now().Add(time.Hour * 24).Unix()
+
+			tokenString, err := token.SignedString(JwtSalt)
+			if err != nil {
+				log.Info(err)
+			}
+			json.NewEncoder(w).Encode(TokenString{Token: tokenString})
 		} else {
 			json.NewEncoder(w).Encode(models.JSONError{Message: "Your login / Password is wrong", Code: 403})
 		}

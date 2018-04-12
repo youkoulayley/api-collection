@@ -17,6 +17,7 @@ func InitializeRouter() *mux.Router {
 	log.Info("Routes - GET /status")
 	router.Methods("GET").Path("/status").Name("status").HandlerFunc(controllers.HeartbeatIndex)
 
+	// AUTH
 	log.Info("Routes - POST /token")
 	router.Methods("POST").Path("/token").Name("token").HandlerFunc(controllers.TokenGet)
 
