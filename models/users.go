@@ -9,6 +9,6 @@ type User struct {
 	Email    string    `gorm:"type:varchar(50);unique_index;not null" json:"email,omitempty"`
 	Password string    `gorm:"type:varchar(255);not null" json:"password,omitempty"`
 	Role     Role      `json:"role"`
-	RoleID   uint       `json:"role_id,omitempty"`
+	RoleID   uint      `json:"role_id,omitempty"`
 	Channels []Channel `gorm:"many2many:channel_user"`
 }

@@ -1,13 +1,16 @@
 package controllers
 
 import (
-"encoding/json"
-"net/http"
-
-"github.com/youkoulayley/api-collection/models"
+	"encoding/json"
+	"net/http"
 )
 
+type heartbeat struct {
+	Status string `json:"status"`
+	Code   int    `json:"code"`
+}
+
 // HeartbeatIndex return the status of the api
-func HeartbeatIndex(w http.ResponseWriter, r *http.Request) {
-	json.NewEncoder(w).Encode(models.Heartbeat{Status: "OK", Code: 200})
+func HeartbeatIndex(w http.ResponseWriter, _ *http.Request) {
+	json.NewEncoder(w).Encode(heartbeat{Status: "OK", Code: 200})
 }

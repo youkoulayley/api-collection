@@ -1,17 +1,17 @@
 package repositories
 
 import (
+	"errors"
 	log "github.com/sirupsen/logrus"
 	"github.com/youkoulayley/api-collection/bootstrap"
 	"github.com/youkoulayley/api-collection/models"
-	"errors"
 )
 
 // RolesGetAll fetch all roles
 func RolesGetAll() []models.Role {
 	var r []models.Role
 
-	bootstrap.Db().Preload("User").Find(&r)
+	bootstrap.Db().Find(&r)
 
 	return r
 }
@@ -39,6 +39,7 @@ func RoleCreate(r *models.Role) error {
 	return nil
 }
 
+// RoleGetByID fetch a role by its ID
 func RoleGetByID(id int) *models.Role {
 	var role models.Role
 
@@ -47,6 +48,7 @@ func RoleGetByID(id int) *models.Role {
 	return &role
 }
 
+// RoleUpdate update a role
 func RoleUpdate(r *models.Role) error {
 	if r.Name != "" {
 		// Check if name already exists
@@ -67,6 +69,7 @@ func RoleUpdate(r *models.Role) error {
 	return nil
 }
 
+//RoleDelete delete a role by its ID
 func RoleDelete(r *models.Role) error {
 	err := bootstrap.Db().Delete(&r).Error
 	if err != nil {

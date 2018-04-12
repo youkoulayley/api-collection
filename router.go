@@ -1,16 +1,15 @@
 package main
 
 import (
-	"github.com/youkoulayley/api-collection/controllers"
-
 	"github.com/gorilla/mux"
 	log "github.com/sirupsen/logrus"
+	"github.com/youkoulayley/api-collection/controllers"
+	"github.com/youkoulayley/api-collection/middlewares"
 )
 
 var router *mux.Router
 
-// InitializeRouter do what is name tell he does
-func InitializeRouter() *mux.Router {
+func initializeRouter() *mux.Router {
 	// StrictSlash is true => redirect /cars/ to /cars
 	router = mux.NewRouter().StrictSlash(true)
 
@@ -25,7 +24,7 @@ func InitializeRouter() *mux.Router {
 	log.Info("Routes - GET /roles")
 	router.Methods("GET").Path("/roles").Name("role.index").HandlerFunc(controllers.RoleIndex)
 	log.Info("Routes - POST /roles")
-	router.Methods("POST").Path("/roles").Name("role.create").HandlerFunc(controllers.RoleCreate)
+	router.Methods("POST").Path("/roles").Name("role.create").HandlerFunc(middlewares.JwtMiddleware(controllers.RoleCreate))
 	log.Info("Routes - GET /roles/{id}")
 	router.Methods("GET").Path("/roles/{id:[0-9]+}").Name("role.show").HandlerFunc(controllers.RoleShow)
 	log.Info("Routes - PUT /roles/{id}")
@@ -47,10 +46,5 @@ func InitializeRouter() *mux.Router {
 	// log.Info("Routes - DELETE /users/{id}")
 	// router.Methods("DELETE").Path("/users/{id:[0-9]+}").Name("user.delete").HandlerFunc(controllers.UserDelete)
 
-	return router
-}
-
-// Router is the getter
-func Router() *mux.Router {
 	return router
 }

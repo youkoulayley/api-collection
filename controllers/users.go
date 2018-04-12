@@ -10,10 +10,11 @@ import (
 	"github.com/youkoulayley/api-collection/models"
 	"github.com/youkoulayley/api-collection/repositories"
 	"io/ioutil"
+	"strings"
 )
 
 // UserIndex define the logic for the routes GET /users
-func UserIndex(w http.ResponseWriter, r *http.Request) {
+func UserIndex(w http.ResponseWriter, _ *http.Request) {
 	w.Header().Set("Content-type", "application/json;charset=UTF-8")
 	w.WriteHeader(http.StatusOK)
 
@@ -43,18 +44,17 @@ func UserCreate(w http.ResponseWriter, r *http.Request) {
 			log.Error(err.Error())
 		}
 	} else {
-		user.Password = HashPassword(user.Password)
+		user.Username = strings.ToLower(user.Username)
+		user.Password = hashPassword(user.Password)
 
 		err = repositories.UserCreate(&user)
 		if err != nil {
-			err := models.JSONError{Message: err.Error(), Code: 422}
-			json.NewEncoder(w).Encode(err)
+			json.NewEncoder(w).Encode(models.JSONError{Message: err.Error(), Code: 422})
 		} else {
 			if user.ID != 0 {
 				json.NewEncoder(w).Encode(user)
 			} else {
-				err := models.JSONError{Message: "Error when creating user", Code: 422}
-				json.NewEncoder(w).Encode(err)
+				json.NewEncoder(w).Encode(models.JSONError{Message: "Error when creating user", Code: 422})
 			}
 		}
 	}
@@ -79,6 +79,7 @@ func UserShow(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// UserGetRole contain the logic to fetch the role of a particular user
 func UserGetRole(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-type", "application/json;charset=UTF-8")
 	w.WriteHeader(http.StatusOK)

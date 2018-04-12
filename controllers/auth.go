@@ -1,32 +1,31 @@
 package controllers
 
 import (
-	"golang.org/x/crypto/bcrypt"
-	log "github.com/sirupsen/logrus"
-	"net/http"
-	"io/ioutil"
 	"encoding/json"
-	"github.com/youkoulayley/api-collection/repositories"
+	log "github.com/sirupsen/logrus"
 	"github.com/youkoulayley/api-collection/models"
+	"github.com/youkoulayley/api-collection/repositories"
+	"golang.org/x/crypto/bcrypt"
+	"io/ioutil"
+	"net/http"
 
 	"github.com/dgrijalva/jwt-go"
 	"time"
 )
 
-// Token struct contain the format for getting token
-type Token struct {
-	Username string
-	Password string
+type auth struct {
+	Username string `json:"username"`
+	Password string `json:"password"`
+}
+type token struct {
+	Token string `json:"token"`
 }
 
-type TokenString struct {
-	Token 	string
-}
-
+// JwtSalt is getting its value from main.go
 var JwtSalt []byte
 
-// HashPassword use the bcrypt generateFromPassword function but take a string parameters instead of a byte table.
-func HashPassword(password string) string {
+// hashPassword use the b-crypt generateFromPassword function but take a string parameters instead of a byte table.
+func hashPassword(password string) string {
 	bytePassword := []byte(password)
 
 	hashedPassword, err := bcrypt.GenerateFromPassword(bytePassword, bcrypt.DefaultCost)
@@ -37,11 +36,10 @@ func HashPassword(password string) string {
 	return string(hashedPassword)
 }
 
-// CompareHashPassword use the bcrypt CompareHashAndPassword function but take strings in parameters instead of bytes
-func CompareHashPassword(hash string, password string) bool {
+// CompareHashPassword use the b-crypt CompareHashAndPassword function but take strings in parameters instead of bytes
+func compareHashPassword(hash string, password string) bool {
 	hashByte := []byte(hash)
 	passwordByte := []byte(password)
-
 
 	err := bcrypt.CompareHashAndPassword(hashByte, passwordByte)
 	if err != nil {
@@ -60,33 +58,33 @@ func TokenGet(w http.ResponseWriter, r *http.Request) {
 		log.Error(err)
 	}
 
-	var tokenGet Token
+	var a auth
 
-	err = json.Unmarshal(body, &tokenGet)
+	err = json.Unmarshal(body, &a)
 	if err != nil {
 		log.Error(err)
 	}
 
 	// Verify that the user exists in database
-	user := repositories.UserGetByUsername(tokenGet.Username)
+	user := repositories.UserGetByUsername(a.Username)
 
 	if user.ID == 0 {
 		json.NewEncoder(w).Encode(models.JSONError{Message: "User Not Found", Code: 404})
 	} else {
-		compare := CompareHashPassword(user.Password, tokenGet.Password)
+		compare := compareHashPassword(user.Password, a.Password)
 		if compare {
-			token := jwt.New(jwt.SigningMethodHS256)
-			claims := token.Claims.(jwt.MapClaims)
+			jwtToken := jwt.New(jwt.SigningMethodHS256)
+			claims := jwtToken.Claims.(jwt.MapClaims)
 
 			claims["username"] = user.Username
 			claims["role"] = user.RoleID
 			claims["exp"] = time.Now().Add(time.Hour * 24).Unix()
 
-			tokenString, err := token.SignedString(JwtSalt)
-			if err != nil {
+			tokenString, errSign := jwtToken.SignedString(JwtSalt)
+			if errSign != nil {
 				log.Info(err)
 			}
-			json.NewEncoder(w).Encode(TokenString{Token: tokenString})
+			json.NewEncoder(w).Encode(token{Token: tokenString})
 		} else {
 			json.NewEncoder(w).Encode(models.JSONError{Message: "Your login / Password is wrong", Code: 403})
 		}

@@ -23,13 +23,13 @@ func main() {
 	bootstrap.OpenDB(c)          // Init the DB
 	bootstrap.LaunchMigrations() // Launch database migration
 
-	router := InitializeRouter() // Init router
+	r := initializeRouter() // Init router
 
-	// CORS HEADERS
-	corsAllowedOrigins := handlers.AllowedOrigins(c.Cors.AuthorizedHosts)   // Authorized hosts
-	corsAllowedMethods := handlers.AllowedMethods(c.Cors.AuthorizedMethods) // Authorized methods
-	corsAllowedHeaders := handlers.AllowedHeaders(c.Cors.AuthorizedHeaders) // Authorized headers
+	// HEADERS
+	AllowedOrigins := handlers.AllowedOrigins(c.Cors.AuthorizedHosts)   // Authorized hosts
+	AllowedMethods := handlers.AllowedMethods(c.Cors.AuthorizedMethods) // Authorized methods
+	AllowedHeaders := handlers.AllowedHeaders(c.Cors.AuthorizedHeaders) // Authorized headers
 
 	log.Info("Start to listen on ", c.Port, " ...")
-	log.Fatal(http.ListenAndServe(":"+c.Port, handlers.CORS(corsAllowedOrigins, corsAllowedMethods, corsAllowedHeaders)(router))) // Serve the HTTP Server. Exit if fail.
+	log.Fatal(http.ListenAndServe(":"+c.Port, handlers.CORS(AllowedOrigins, AllowedMethods, AllowedHeaders)(r))) // Serve the HTTP Server. Exit if fail.
 }

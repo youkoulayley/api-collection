@@ -5,15 +5,15 @@ import (
 	"io/ioutil"
 	"net/http"
 
+	"github.com/gorilla/mux"
 	log "github.com/sirupsen/logrus"
 	"github.com/youkoulayley/api-collection/models"
 	"github.com/youkoulayley/api-collection/repositories"
-	"github.com/gorilla/mux"
 	"strconv"
 )
 
 // RoleIndex define the logic for the routes GET /roles
-func RoleIndex(w http.ResponseWriter, r *http.Request) {
+func RoleIndex(w http.ResponseWriter, _ *http.Request) {
 	w.Header().Set("Content-type", "application/json;charset=UTF-8")
 	w.WriteHeader(http.StatusOK)
 
@@ -45,14 +45,12 @@ func RoleCreate(w http.ResponseWriter, r *http.Request) {
 	} else {
 		err = repositories.RoleCreate(&role)
 		if err != nil {
-			err := models.JSONError{Message: err.Error(), Code: 403}
-			json.NewEncoder(w).Encode(err)
+			json.NewEncoder(w).Encode(models.JSONError{Message: err.Error(), Code: 403})
 		} else {
 			if role.ID != 0 {
 				json.NewEncoder(w).Encode(role)
 			} else {
-				err := models.JSONError{Message: "Error when creating model", Code: 422}
-				json.NewEncoder(w).Encode(err)
+				json.NewEncoder(w).Encode(models.JSONError{Message: "Error when creating model", Code: 422})
 			}
 		}
 	}
@@ -77,6 +75,7 @@ func RoleShow(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// RoleUpdate contains the logic to update a role
 func RoleUpdate(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-type", "application/json;charset=UTF-8")
 	w.WriteHeader(http.StatusOK)
@@ -110,6 +109,7 @@ func RoleUpdate(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// RoleDelete contains the logic to delete a role
 func RoleDelete(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-type", "application/json;charset=UTF-8")
 	w.WriteHeader(http.StatusOK)
