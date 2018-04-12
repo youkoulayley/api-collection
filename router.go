@@ -24,7 +24,7 @@ func initializeRouter() *mux.Router {
 	log.Info("Routes - GET /roles")
 	router.Methods("GET").Path("/roles").Name("role.index").HandlerFunc(controllers.RoleIndex)
 	log.Info("Routes - POST /roles")
-	router.Methods("POST").Path("/roles").Name("role.create").HandlerFunc(middlewares.JwtMiddleware(controllers.RoleCreate))
+	router.Handle("/roles", middlewares.ValidateMiddleware(controllers.RoleCreate)).Methods("POST").Name("role.create")
 	log.Info("Routes - GET /roles/{id}")
 	router.Methods("GET").Path("/roles/{id:[0-9]+}").Name("role.show").HandlerFunc(controllers.RoleShow)
 	log.Info("Routes - PUT /roles/{id}")
