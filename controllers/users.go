@@ -43,9 +43,11 @@ func UserCreate(w http.ResponseWriter, r *http.Request) {
 			log.Error(err.Error())
 		}
 	} else {
+		user.Password = HashPassword(user.Password)
+
 		err = repositories.UserCreate(&user)
 		if err != nil {
-			err := models.JSONError{Message: err.Error(), Code: 403}
+			err := models.JSONError{Message: err.Error(), Code: 422}
 			json.NewEncoder(w).Encode(err)
 		} else {
 			if user.ID != 0 {

@@ -56,7 +56,7 @@ func UserGetByID(id int) *models.User {
 func UserGetByUsername(username string) *models.User {
 	var user models.User
 
-	bootstrap.Db().Where("name = ?", username).First(&user)
+	bootstrap.Db().Where("username = ?", username).First(&user)
 
 	return &user
 }
