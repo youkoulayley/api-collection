@@ -20,6 +20,7 @@
 Two prerequisites :
   1. Go >= 1.10
   2. Postgres >= 10
+  3. Glide
 
 # Dev installation
 ## Database
@@ -31,7 +32,7 @@ docker run -it -d -p 5432:5432 --restart=always -e POSTGRES_PASSWORD="apicollect
 ```
 git clone https://github.com/youkoulayley/api-collection
 cd api-collection
-go get
+glide install
 cp conf.example.json conf.json
 cp conf.example.json conf_test.json
 ```

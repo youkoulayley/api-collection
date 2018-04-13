@@ -1,4 +1,5 @@
 .idea
+vendor/
 api-collection.exe
 api-collection.exe~
 api-collection
