@@ -6,6 +6,7 @@
 |----|-----------|----------|
 |Version|Version of the application|string|
 |Port|Port for the application to listen on|string|
+|JWTSalt|Salt for the JWT signature|string|
 |AuthorizedHosts|CORS Header for authorized hosts|[]string|
 |Database.Host|Host of the database server|string|
 |Database.Port|Port of the database server|string|

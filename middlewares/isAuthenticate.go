@@ -11,7 +11,7 @@ import (
 	"strings"
 )
 
-func ValidateMiddleware(next http.HandlerFunc) http.HandlerFunc {
+func IsAuthenticate(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		authorizationHeader := r.Header.Get("Authorization")
 		if authorizationHeader != "" {
@@ -30,7 +30,7 @@ func ValidateMiddleware(next http.HandlerFunc) http.HandlerFunc {
 				}
 				if token.Valid {
 					context.Set(r, "decoded", token.Claims)
-					next(w, r)
+					next.ServeHTTP(w, r)
 				} else {
 					json.NewEncoder(w).Encode(models.JSONError{Message: "Invalid authorization token", Code: 403})
 				}

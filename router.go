@@ -2,7 +2,6 @@ package main
 
 import (
 	"github.com/gorilla/mux"
-	log "github.com/sirupsen/logrus"
 	"github.com/youkoulayley/api-collection/controllers"
 	"github.com/youkoulayley/api-collection/middlewares"
 )
@@ -10,37 +9,32 @@ import (
 var router *mux.Router
 
 func initializeRouter() *mux.Router {
-	// StrictSlash is true => redirect /cars/ to /cars
+	// StrictSlash is true => redirect /cars to /cars/
 	router = mux.NewRouter().StrictSlash(true)
 
-	log.Info("Routes - GET /status")
-	router.Methods("GET").Path("/status").Name("status").HandlerFunc(controllers.HeartbeatIndex)
+	ApiRouter := router.PathPrefix("/api").Subrouter()
 
-	// AUTH
-	log.Info("Routes - POST /token")
-	router.Methods("POST").Path("/token").Name("token").HandlerFunc(controllers.TokenGet)
+	// V1 Router
+	V1Router := ApiRouter.PathPrefix("/v1").Subrouter()
+	V1Router.Methods("GET").Path("/status").Name("status").HandlerFunc(controllers.HeartbeatIndex)
+	V1Router.Methods("POST").Path("/login").Name("login").HandlerFunc(controllers.TokenGet)
 
-	// ROLES
-	log.Info("Routes - GET /roles")
-	router.Methods("GET").Path("/roles").Name("role.index").HandlerFunc(controllers.RoleIndex)
-	log.Info("Routes - POST /roles")
-	router.Handle("/roles", middlewares.ValidateMiddleware(controllers.RoleCreate)).Methods("POST").Name("role.create")
-	log.Info("Routes - GET /roles/{id}")
-	router.Methods("GET").Path("/roles/{id:[0-9]+}").Name("role.show").HandlerFunc(controllers.RoleShow)
-	log.Info("Routes - PUT /roles/{id}")
-	router.Methods("PUT").Path("/roles/{id:[0-9]+}").Name("role.update").HandlerFunc(controllers.RoleUpdate)
-	log.Info("Routes - DELETE /roles/{id}")
-	router.Methods("DELETE").Path("/roles/{id:[0-9]+}").Name("role.delete").HandlerFunc(controllers.RoleDelete)
+	AdminRouter := V1Router.PathPrefix("/admin").Subrouter()
+	AdminRouter.Use(middlewares.IsAuthenticate)
+	AdminRouter.Use(middlewares.IsAdmin)
 
-	// USERS
-	log.Info("Routes - GET /users")
-	router.Methods("GET").Path("/users").Name("user.index").HandlerFunc(controllers.UserIndex)
-	log.Info("Routes - POST /users")
-	router.Methods("POST").Path("/users").Name("user.create").HandlerFunc(controllers.UserCreate)
-	log.Info("Routes - GET /users/{id}")
-	router.Methods("GET").Path("/users/{id:[0-9]+}").Name("user.show").HandlerFunc(controllers.UserShow)
-	log.Info("Routes - Get /users/{id}/role/")
-	router.Methods("GET").Path("/users/{id:[0-9]+}/role").Name("user.role").HandlerFunc(controllers.UserGetRole)
+	RoleRouter := AdminRouter.PathPrefix("/roles").Subrouter()
+	RoleRouter.Methods("GET").Path("/").Name("role.index").HandlerFunc(controllers.RoleIndex)
+	RoleRouter.Methods("POST").Path("/").Name("role.create").HandlerFunc(controllers.RoleCreate)
+	RoleRouter.Methods("GET").Path("/{id:[0-9]+}").Name("role.show").HandlerFunc(controllers.RoleShow)
+	RoleRouter.Methods("PUT").Path("/{id:[0-9]+}").Name("role.update").HandlerFunc(controllers.RoleUpdate)
+	RoleRouter.Methods("DELETE").Path("/{id:[0-9]+}").Name("role.delete").HandlerFunc(controllers.RoleDelete)
+
+	UserRouter := V1Router.PathPrefix("/users").Subrouter()
+	UserRouter.Methods("GET").Path("/").Name("user.index").HandlerFunc(controllers.UserIndex)
+	UserRouter.Methods("POST").Path("/").Name("user.create").HandlerFunc(controllers.UserCreate)
+	UserRouter.Methods("GET").Path("/{id:[0-9]+}").Name("user.show").HandlerFunc(controllers.UserShow)
+	UserRouter.Methods("GET").Path("/{id:[0-9]+}/role").Name("user.role").HandlerFunc(controllers.UserGetRole)
 	// log.Info("Routes - PUT /users/{id}")
 	// router.Methods("PUT").Path("/users/{id:[0-9]+}").Name("user.update").HandlerFunc(controllers.UserUpdate)
 	// log.Info("Routes - DELETE /users/{id}")

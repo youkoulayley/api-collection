@@ -11,6 +11,8 @@ import (
 
 	"github.com/dgrijalva/jwt-go"
 	"time"
+	"github.com/gorilla/context"
+	"github.com/mitchellh/mapstructure"
 )
 
 type auth struct {
@@ -46,6 +48,16 @@ func compareHashPassword(hash string, password string) bool {
 		return false
 	}
 	return true
+}
+
+// DecodeJwtToken decode a jwt token to get claims
+func DecodeJwtToken(r *http.Request) models.Jwt {
+	decoded := context.Get(r, "decoded")
+
+	var JwtToken models.Jwt
+	mapstructure.Decode(decoded.(jwt.MapClaims), &JwtToken)
+
+	return JwtToken
 }
 
 // TokenGet has the logic to generate a token for user
@@ -85,6 +97,7 @@ func TokenGet(w http.ResponseWriter, r *http.Request) {
 				log.Info(err)
 			}
 			json.NewEncoder(w).Encode(token{Token: tokenString})
+			// TODO: Add token in redis database
 		} else {
 			json.NewEncoder(w).Encode(models.JSONError{Message: "Your login / Password is wrong", Code: 403})
 		}
