@@ -2,15 +2,12 @@ package models
 
 // Conf is a model for configuration
 type Conf struct {
-	Version         string
-	Port            string
 	Cors struct {
-		AuthorizedHosts []string
+		AuthorizedHosts   []string
 		AuthorizedMethods []string
 		AuthorizedHeaders []string
 	}
-	JWTSalt 		string
-	Database        struct {
+	Database struct {
 		Host     string
 		Port     string
 		User     string
@@ -22,4 +19,12 @@ type Conf struct {
 		Output    string
 		Level     string
 	}
+	JWTSalt string
+	Port    string
+	Redis   struct {
+		Host     string
+		Port     string
+		Password string
+	}
+	Version string
 }

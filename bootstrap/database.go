@@ -31,7 +31,7 @@ func OpenDB(c *models.Conf) {
 		time.Sleep(30 * time.Second)
 		err = db.DB().Ping()
 	}
-	log.Info("Database - Joinable")
+	log.Info("Database - Connected")
 }
 
 // Db Getter for db var

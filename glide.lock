@@ -1,8 +1,10 @@
-hash: 5bcaeee055489956557a92ee07317ac88a9685da2252c2f1d6af8c4f7ef345cc
-updated: 2018-04-13T15:54:58.923763931+02:00
+hash: 99d96e0be0f47e84438331213c24802d566d8332455808be1edb24db8f715dd3
+updated: 2018-04-14T17:09:56.8045783+02:00
 imports:
 - name: github.com/dgrijalva/jwt-go
   version: 06ea1031745cb8b3dab3f6a236daf2b0aa468b7e
+- name: github.com/go-redis/redis
+  version: 877867d2845fbaf86798befe410b6ceb6f5c29a3
 - name: github.com/gorilla/context
   version: 1ea25387ff6f684839d82767c1733ff4d4d15d0a
 - name: github.com/gorilla/handlers

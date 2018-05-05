@@ -9,10 +9,12 @@ import (
 	"io/ioutil"
 	"net/http"
 
+	"fmt"
 	"github.com/dgrijalva/jwt-go"
-	"time"
 	"github.com/gorilla/context"
 	"github.com/mitchellh/mapstructure"
+	"github.com/youkoulayley/api-collection/bootstrap"
+	"time"
 )
 
 type auth struct {
@@ -97,9 +99,22 @@ func TokenGet(w http.ResponseWriter, r *http.Request) {
 				log.Info(err)
 			}
 			json.NewEncoder(w).Encode(token{Token: tokenString})
-			// TODO: Add token in redis database
 		} else {
 			json.NewEncoder(w).Encode(models.JSONError{Message: "Your login / Password is wrong", Code: 403})
 		}
 	}
+}
+
+// TokenRemove set the token in redis to invalid it
+func TokenRemove(token string) {
+	err := bootstrap.Redis().Set("token_invalid", token, 0).Err()
+	if err != nil {
+		log.Error(err)
+	}
+
+	val, err := bootstrap.Redis().Get("token_invalid").Result()
+	if err != nil {
+		log.Error(err)
+	}
+	fmt.Println("token_invalid", val)
 }

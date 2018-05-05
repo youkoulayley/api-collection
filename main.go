@@ -21,6 +21,7 @@ func main() {
 
 	bootstrap.InitLogs(c)        // Init the logs
 	bootstrap.OpenDB(c)          // Init the DB
+	bootstrap.OpenRedis(c)       //Init Redis
 	bootstrap.LaunchMigrations() // Launch database migration
 
 	r := initializeRouter() // Init router

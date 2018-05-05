@@ -1,0 +1,10 @@
+workspace:
+  base: /go
+  path: src/github.com/youkoulayley/api-collection
+
+pipeline:
+  build:
+    image: golang:latest
+    commands:
+      - go get
+      - go build
