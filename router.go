@@ -18,7 +18,7 @@ func initializeRouter() *mux.Router {
 	V1Router := ApiRouter.PathPrefix("/v1").Subrouter()
 	V1Router.Methods("GET").Path("/status").HandlerFunc(controllers.HeartbeatIndex).Name("status")
 	V1Router.Methods("POST").Path("/login").HandlerFunc(controllers.TokenGet).Name("login")
-	V1Router.Methods("POST").Path("/logout").HandlerFunc(controllers.TokenRemove).Name("logout")
+	//V1Router.Methods("POST").Path("/logout").HandlerFunc(controllers.TokenRemove).Name("logout")
 
 	AdminRouter := V1Router.PathPrefix("/admin").Subrouter()
 	AdminRouter.Use(middlewares.IsAuthenticate)
