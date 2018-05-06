@@ -1,5 +1,5 @@
 # API Management Collection
-[Badge](https://drone.journeytotheit.ovh/api/badges/Youkoulayley/api-collection/status.svg)
+![Badge](https://drone.journeytotheit.ovh/api/badges/Youkoulayley/api-collection/status.svg)
 
 # Config File
 
